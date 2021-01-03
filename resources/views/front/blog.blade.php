@@ -1,0 +1,87 @@
+@extends('front.layouts.app')
+@section('page_content')
+    <div class="ps-breadcrumb">
+      <div class="container def-pad">
+        <ul class="breadcrumb">
+          <li><a class="" href="{{route('front.index')}}">Home</a></li>
+          <li class="text-white">Blog</li>
+           
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="ps-page--blog">
+      <div class="container def-pad">
+        <div class="ps-page__header">
+          <h1 class="text-center " >Our Press</h1>
+        </div>
+        <div class="ps-blog__header">
+            <ul class="ps-list--blog-links">
+              <li class="{{$bslg=="All"?'active':''}}"><a href="{{route('front.blog')}}">All</a></li>
+              @foreach($b_cats as $b_cat)
+                <li class="{{$b_cat->slug==$bslg?'active':''}}"><a href="{{route('front.blog',$b_cat->slug)}}">{{$b_cat->name}}</a></li>
+              @endforeach
+              
+            </ul>
+          </div>
+        <div class="ps-blog--sidebar">
+
+	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">                        
+	            <div class="row blog-pg-tag">
+                    @if(count($datas)>0)
+                       @foreach($datas as $data)
+                          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
+                            <div class="ps-post">
+                              <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{route('front.blog.detail',$data->slug)}}"></a><img src="{{asset('assets/images/articles/'.$data->photo)}}" alt="">
+                                
+                              </div>
+                              <div class="ps-post__content">
+                                <div class="ps-post__meta">
+                                   
+                                   <div class="blog-li-span">
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+                                    
+                                    <span class="sp-txt">{{$data->category->name}}</span>
+                                   </div>
+                                </div>
+                                <a class="ps-post__title" href="{{route('front.blog.detail',$data->slug)}}">{{$data->title}}</a>
+                                <p class="sp-txt">{{ Illuminate\Support\Str::limit($data->small_desc, 130) }}</p>
+                                <a href="{{route('front.blog.detail',$data->slug)}}" class="ps-post__title_read">Read more</a>
+                              </div>
+                            </div>
+                          </div> 
+                       @endforeach 
+                    @else
+                    <h2>No Data Found</h2>
+                    @endif
+                   
+                        
+	            </div>
+	            <div class="ps-pagination">
+	              <ul class="pagination">
+	                <li>
+                   {{$datas->Oneachside(2)->links('includes.pagination.default')}} 
+                  </li>
+	              </ul>
+	            </div>
+	        </div>
+	        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+  
+                @include('front.layouts.sidebar')
+
+	        </div>
+        </div>
+      </div>
+    </div>
+
+
+	<div class="row">
+	    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 "></div>
+	    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 "></div>
+	</div>
+
+
+@endsection
+
+
