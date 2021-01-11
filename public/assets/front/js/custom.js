@@ -75,7 +75,7 @@ $(function ($) {
                   $('.alert-danger ul').append('<li>'+ data.errors[error] +'</li>')
                 }
                 $('#contactform input[type=text], #contactform input[type=email], #contactform textarea').eq(0).focus();
-                $('#contactform .refresh_code').trigger('click');
+                $('#contactform #reload-cap').trigger('click');
 
               }
               else
@@ -85,7 +85,7 @@ $(function ($) {
                 $('.alert-success p').html(data);
                 $('#contactform input[type=text], #contactform input[type=email], #contactform textarea').eq(0).focus();
                 $('#contactform input[type=text], #contactform input[type=email], #contactform textarea').val('');
-                $('#contactform .refresh_code').trigger('click');
+                $('#contactform #reload-cap').trigger('click');
 
               }
               $('.gocover').hide();

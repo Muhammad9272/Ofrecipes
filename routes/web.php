@@ -72,7 +72,7 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::get('/subcategory/delete/{id}', 'Admin\SubCategoryController@destroy')->name('admin-subcat-delete');
   Route::get('/subcategory/status/{id1}/{id2}', 'Admin\SubCategoryController@status')->name('admin-subcat-status');
   Route::get('/load/subcategories/{id}/', 'Admin\SubCategoryController@load')->name('admin-subcat-load'); //JSON REQUEST
-
+  Route::post('subcategory/bulk/update', 'Admin\SubCategoryController@bulkedit')->name('admin-subcat-bulkedit');
   // SUBCATEGORY SECTION ENDS------------
 
 
@@ -88,7 +88,15 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::post('/recipe/edit/{id}', 'Admin\RecipeController@update')->name('admin-recipe-update');
   Route::get('/recipe/delete/{id}', 'Admin\RecipeController@destroy')->name('admin-recipe-delete');
   Route::get('/recipe/status/{id1}/{id2}', 'Admin\RecipeController@status')->name('admin-recipe-status');
-  Route::get('/load/recipe/{id}/', 'Admin\RecipeController@load')->name('admin-recipe-load'); //JSON REQUEST
+  Route::get('/load/recipe/{id}/', 'Admin\RecipeController@load')->name('admin-recipe-load');
+
+  Route::get('/highlight/recipe/{id}/', 'Admin\RecipeController@highlight')->name('admin-recipe-highlight');
+  Route::post('/highlight/recipe/{id}/', 'Admin\RecipeController@highlightupdate')->name('admin-recipe-highlight');
+
+  Route::post('/bulk/recipe/', 'Admin\RecipeController@bulkedit')->name('admin-recipe-bulkedit');
+
+
+   //JSON REQUEST
 
   // RECIPE SECTION ENDS------------
 
@@ -141,6 +149,10 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::get('/blog/status/{id1}/{id2}', 'Admin\ArticleController@status')->name('admin-article-status');
   Route::get('/blog/delete/{id}', 'Admin\ArticleController@destroy')->name('admin-article-delete');
 
+  Route::post('/blog/slug/update', 'Admin\ArticleController@updateBlogSlug')->name('admin-article-slug-update');
+  Route::post('/bulk/blog/', 'Admin\ArticleController@bulkedit')->name('admin-blog-bulkedit');
+
+
   Route::get('/blog/category/datatables', 'Admin\BlogCategoryController@datatables')->name('admin-cblog-datatables'); //JSON REQUEST
   Route::get('/blog/category', 'Admin\BlogCategoryController@index')->name('admin-cblog-index');
   Route::get('/blog/category/create', 'Admin\BlogCategoryController@create')->name('admin-cblog-create');
@@ -148,6 +160,7 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::get('/blog/category/edit/{id}', 'Admin\BlogCategoryController@edit')->name('admin-cblog-edit');
   Route::post('/blog/category/edit/{id}', 'Admin\BlogCategoryController@update')->name('admin-cblog-update');
   Route::get('/blog/category/delete/{id}', 'Admin\BlogCategoryController@destroy')->name('admin-cblog-delete');
+
 
 
 
@@ -210,27 +223,22 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
 
 
 Route::get('/', 'Front\HomeController@index')->name('front.index');
+
 Route::get('/recipe/{slug}', 'Front\HomeController@recipedetail')->name('front.recipe');
 Route::get('/recipe/{slug}/print', 'Front\HomeController@printpage')->name('recipe-print');
 
-Route::get('/blogs/{slug?}', 'Front\HomeController@blog')->name('front.blog');
 
-Route::get('/blog/{slug}', 'Front\HomeController@blogdetail')->name('front.blog.detail');
 Route::get('/contact', 'Front\HomeController@contact')->name('front.contact');
 Route::post('/contact','Front\HomeController@contactemail')->name('front.contact.submit');
 
 
-Route::get('/category/recipe', 'Front\HomeController@category')->name('front.category');
-Route::get('/category/cuisine', 'Front\HomeController@category')->name('front.cuisine');
-
+Route::get('/category/{slug}', 'Front\HomeController@category')->name('front.category');
 
 
 Route::get('/recipes/all', 'Front\HomeController@categorydetail')->name('front.recipe.all');
 Route::get('/recipes/search', 'Front\HomeController@RecipeSearch')->name('front.recipe.search');
 
-Route::get('/category/recipe/{slug}', 'Front\HomeController@categorydetail')->name('front.category.detail');
-Route::get('/category/cuisine/{slug}', 'Front\HomeController@categorydetail')->name('front.cuisine.detail');
-
+Route::get('/category/{slug1}/{slug2}', 'Front\HomeController@categorydetail')->name('front.category.detail');
 
 
 Route::get('/about-us', 'Front\HomeController@about')->name('front.about');
@@ -251,6 +259,10 @@ Route::get('/about-us', 'Front\HomeController@about')->name('front.about');
    Route::get('/load-more-reviews','Front\HomeController@more_reviews')->name('load-more-reviews');
 
 
+
+Route::get('/load-captcha/new','Front\HomeController@loadCaptcha')->name('load-new-captcha');
+
+
 // Route::get('/articles/', 'Front\FrontendController@Articleid')->name('front.article.id');
 
 // Route::get('/articles/{slug}', 'Front\FrontendController@Article')->name('front.article');
@@ -258,6 +270,10 @@ Route::get('/about-us', 'Front\HomeController@about')->name('front.about');
 
 // Route::get('/contact/', 'Front\FrontendController@Contact')->name('front.contact');
 // Route::post('/contact','Front\FrontendController@contactemail')->name('front.contact.submit');
+
+Route::get('/{slug}/category/{slug1}', 'Front\HomeController@page')->name('front.blog.cat');
+
+Route::get('/blog/{slug}', 'Front\HomeController@blogdetail')->name('front.blog.detail');
 
 Route::get('/{slug}/', 'Front\HomeController@page')->name('front.page');
 

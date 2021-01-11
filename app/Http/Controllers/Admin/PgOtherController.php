@@ -20,7 +20,7 @@ class PgOtherController extends Controller
      //*** JSON Request
     public function datatables()
     {
-         $datas = PgOther::orderBy('id','desc')->get();
+         $datas = PgOther::orderBy('id','desc')->where('id','!=',5)->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
 
@@ -64,7 +64,7 @@ class PgOtherController extends Controller
     {
 
         $slug = $request->slug;
-        $main = array('home','faq','contact','blog');
+        $main = array('home','faq','contact','blog','about-us');
         if (in_array($slug, $main)) {
         return response()->json(array('errors' => [ 0 => 'This slug has already been taken.' ]));          
         }
@@ -104,7 +104,7 @@ class PgOtherController extends Controller
         //--- Validation Section Ends
         $slug = $request->slug;
         //--- Validation Section
-        $main = array('home','faq','contact','blog');
+        $main = array('home','faq','contact','blog','about-us');
         if (in_array($slug, $main)) {
         return response()->json(array('errors' => [ 0 => 'This slug has already been taken.' ]));          
         }        

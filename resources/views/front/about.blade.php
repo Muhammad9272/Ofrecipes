@@ -5,7 +5,11 @@
       <div class="container def-pad">
         <ul class="breadcrumb">
           <li><a class="" href="{{route('front.index')}}">Home</a></li>
+          @if(\Route::current()->getName() == 'front.about')
+          <li class="text-white">About</li>
+          @else
           <li class="text-white">{{$data->title}}</li>
+          @endif
            
         </ul>
       </div>
@@ -17,11 +21,17 @@
       <div class="container def-pad">
 
         <div class="row mt-50">
-        	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-80">
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">
 
         		{!! $data->desc !!}
 
         	</div>
+
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
+  
+                @include('front.layouts.sidebar')
+
+          </div>
 	               	
         </div>
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\BlogCategory;
 use App\Models\Generalsetting;
+use App\Models\PgOther;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -22,6 +23,27 @@ class ArticleController extends Controller
          $datas = Article::orderBy('id','desc')->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
+                                ->editColumn('publish_date', function(Article $data) {
+                                if($data->publish_check==1){
+                                    return $data->publish_date;
+                                
+                                }
+                                else{
+                                    return '';
+                                }
+                                
+                            })
+                            ->addColumn('select', function(Article $data) {
+                                return 
+                                '<label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" class="sub_select" data-id="'.$data->id.'" > 
+                                    <span></span>
+                                </label>';
+                            })
+                            ->editColumn('category_id', function(Article $data) {
+                                
+                                return $data->category->name;;
+                            })
                             ->editColumn('photo', function(Article $data) {
                                 $photo = $data->photo ? url('assets/images/articles/'.$data->photo):url('assets/images/noimage.png');
                                 return '<img class="img-thumbnail img-responsive" src="' . $photo . '" alt="Image">';
@@ -34,11 +56,12 @@ class ArticleController extends Controller
                             })
                             ->addColumn('action', function(Article $data) {
                                 return '<div class="action-list">
-                                <a href="' . route('admin-article-edit',$data->id) . '" class="btn btn-outline  btn-sm blue""> <i class="fa fa-edit"></i>Edit</a>
+                                <a href="' . route('front.blog.detail',$data->slug) . '" class="btn btn-outline  btn-sm green"> <i class="fa fa-eye"></i>Preview</a>
+                                <a href="' . route('admin-article-edit',$data->id) . '" class="btn btn-outline  btn-sm blue"> <i class="fa fa-edit"></i>Edit</a>
                                 <a data-href="'.route('admin-article-delete',$data->id).'" class="btn btn-outline delete-data  btn-sm red" data-toggle="confirmation" data-placement="top" data-popout="true" data-id="'.$data->id.'" >
                                     <i class="fa fa-trash"></i> Delete </a></div>';
                             }) 
-                            ->rawColumns(['status','photo', 'action'])
+                            ->rawColumns(['select','status','photo', 'action'])
                             ->toJson(); //--- Returning Json Data To Client Side
     }
 
@@ -47,7 +70,8 @@ class ArticleController extends Controller
     public function index()
     {
         $datas = Article::orderBy('id','desc')->get();
-        return view('admin.blog.index',compact('datas'));
+        $blog_cats = BlogCategory::all();
+        return view('admin.blog.index',compact('datas','blog_cats'));
     }
 
     //*** GET Request
@@ -157,6 +181,54 @@ class ArticleController extends Controller
         //--- Redirect Section Ends            
     }
 
+
+    public function bulkedit(Request $request)
+    {   
+        $action=$request->bulkEditRadios;
+        $ids = explode(',',$request->data_ids);
+        if($ids && $action){
+            if($action==1){
+                 $data=Article::whereIn('id',$ids)
+                 ->update([
+                    'category_id' =>$request->category_id,                     
+                ]);
+             }
+
+            if($action==2){
+                 $data=Article::whereIn('id',$ids)->update(['status' =>$request->status ]);
+             }
+
+
+            if($action==3){
+                 $data=Article::whereIn('id',$ids)
+                 ->update([
+                    'publish_check' =>$request->publish_check==9?0:1,
+                    'publish_date' => $request->publish_date,
+                ]);
+             }
+
+            if($action==4){
+                 $data=Article::whereIn('id',$ids)
+                 ->update([
+                    'updated_check' =>$request->updated_check==9?0:1,
+                    'updated_date' => $request->updated_date,
+                ]);
+             }
+
+            if($action==5){
+                 $data=Article::whereIn('id',$ids)->delete();
+             }
+
+
+            $msg = 'Data Updated Successfully.';
+            return response()->json($msg); 
+         }  
+         else{
+             return response()->json(array('errors' =>'Something Went Wrong ! '));
+         }     
+       
+    }
+
     //*** GET Request Delete
     public function destroy($id)
     {
@@ -190,5 +262,49 @@ class ArticleController extends Controller
         $data->update();
        
     }
+    //*** POST Request
+    public function updateBlogSlug(Request $request)
+    {
+
+        //--- Validation Section Ends
+        $slug = $request->slug;
+        $id=5;
+        //--- Validation Section
+        $main = array('Home','home','faq','contact','about-us');
+        if (in_array($slug, $main)) {
+        return response()->json(array('errors' => [ 0 => 'This slug has already been taken.' ]));          
+        }        
+        $rules = [
+            
+            'slug' => 'required:unique:pg_others,slug,'.$id.'|regex:/^[a-zA-Z0-9\s-]+$/'
+                 ];
+        $customs = [
+            
+            'slug.unique' => 'This slug has already been taken.',
+            'slug.regex' => 'Slug Must Not Have Any Special Characters.'
+                   ];
+        $validator = Validator::make($request->all(), $rules, $customs);
+
+        if ($validator->fails()) {
+          return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
+        }
+
+        //--- Logic Section
+        $data = PgOther::findOrFail(5);
+        $input = $request->all();
+
+        $data->update($input);
+        //--- Logic Section Ends
+
+        //--- Redirect Section     
+        
+        $data=$request->slug;
+        return response()->json($data);      
+        //--- Redirect Section Ends   
+
+
+    }
+
+
 
 }

@@ -22,7 +22,14 @@
 	            </div>
 	            <div class="ps-blog__content">
 	                <div class="blog-li-span social-sh">
-	                            <span class="sp-txt "><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+
+	                	         @if($data->publish_check==1 && $data->publish_date)
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
+                                 @endif
+                                 @if($data->updated_check==1 && $data->updated_date)
+                                    <span class="sp-txt"><span class="tc-orange">Updated :</span>{{ Carbon\Carbon::parse($data->updated_date)->format('M d, Y') }}</span>
+                                 @endif
+	                           
 	                            <span class="sp-txt ">{{count($data->reviews)}} Comments</span>
 	                            @if($data->author_check!=0)
 	                            <span class="sp-txt lst-n-l"><b class="ppn">BY:</b> 
@@ -30,7 +37,7 @@
 	                            		@if($data->author_check==2)
 	                            		<a class="ppn" href="{{$data->author_link}}">{{$data->author_name}}</a>
 	                            		@else
-	                            		<a class="ppn" href="{{route('front.about')}}">{{$gs->name}}</a>
+	                            		<a class="ppn" href="{{$gs->author_link}}">{{$gs->author_name}}</a>
 	                            		@endif
 	                            	</span>
 	                            </span>
@@ -82,7 +89,7 @@
 											                        @if($data->author_check==2)
 								                            		<a class="text-danger mb-10 ppn" href="{{$data->author_link}}">{{$data->author_name}}</a>
 								                            		@else
-								                            		<a class="text-danger mb-10 ppn" href="{{route('front.about')}}">{{$gs->name}}</a>
+								                            		<a class="text-danger mb-10 ppn" href="{{$gs->author_link}}">{{$gs->author_name}}</a>
 								                            		@endif
 				                            					
 				                            					<p class="sp-txt">
@@ -178,12 +185,15 @@
 							                                            <?php $arr=json_decode($data->recipes_id);?>
 							                                            @if($arr && $arr!='[]' )
 								                                            @foreach(App\Models\SubCategory::whereIn('id',$arr)->get() as $recipe)
-								                                             <p class="sp-txt ">
+								                                            @if($recipe)
+								                                             <p class="sp-txt ">  
 								                                             	{{$recipe->name}} 
 								                                             	@if(App\Models\SubCategory::whereIn('id',$arr)->count()>1)
 								                                             	 ,
 								                                             	@endif
+								                                             	
 								                                             </p>
+								                                             @endif
 								                                                  
 								                                            @endforeach
 								                                        @else
@@ -197,12 +207,16 @@
 												                        <?php $arr=json_decode($data->cuisines_id);?>
 							                                            @if($arr && $arr!='[]' )
 								                                            @foreach(App\Models\SubCategory::whereIn('id',$arr)->get() as $cuisine)
-								                                             <p class="sp-txt ">
+								                                            @if($cuisine)
+								                                             <p class="sp-txt ">  
+								                                             	
 								                                             	{{$cuisine->name}} 
 								                                             	@if(App\Models\SubCategory::whereIn('id',$arr)->count()>1)
 								                                             	 ,
 								                                             	@endif
+								                                             	
 								                                             </p>
+								                                             @endif
 								                                                  
 								                                            @endforeach
 								                                        @else
@@ -347,10 +361,10 @@
 					                            						<i class="fa fa-instagram" style="font-size: 60px" aria-hidden="true"></i>
 					                            					</span>
 					                            					<span class="end-content">
-					                            						<span>Tried this recipe?</span>
-					                            						<span class="ppn">Mention 
-					                            							<a class="ppn" href="{{ App\Models\Socialsetting::find(1)->instagram }}">{{$gs->title}}</a>  or tag 
-					                            							<a class="ppn" href="{{ App\Models\Socialsetting::find(1)->instagram }}">#{{$gs->title}}!</a></span>
+					                            						<span class="tried">Tried this recipe?</span>
+					                            						<span class="ppn">
+					                            							{!! $gs->recipe_tag !!}
+					                            						</span>
 					                            					</span>
 					                            				</div>
 					                            			</div>

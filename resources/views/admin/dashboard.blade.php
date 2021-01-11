@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <h4 class="block">What i slug?</h4>
-                <p>Slug is used as page links whenever you create any page,<strong>Don't add white spaces in slug</strong> Try to create user friendly slug.If you create about us page & its slug is like "about-us" then its link will be like that
+                <h4 class="block">What is slug/permalink?</h4>
+                <p>Slug/permalink is used as page links whenever you create any page,<strong>Don't add white spaces in slug</strong> Try to create user friendly slug.If you create about us page & its slug is like "about-us" then its link will be like that
                      <b>https://{{$gs->web_name}}/about-us</b>
                 </p>
 

@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Recipe;
 use App\Models\SubCategory;
-use Illuminate\Http\Request;
+use App\Models\Subscriber;
 use DataTables;
+use Illuminate\Http\Request;
 use Validator;
 class RecipeController extends Controller
 {
@@ -23,10 +24,62 @@ class RecipeController extends Controller
          $datas = Recipe::orderBy('id','desc')->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
+                            ->editColumn('publish_date', function(Recipe $data) {
+                                if($data->publish_check==1){
+                                    return $data->publish_date;
+                                
+                                }
+                                else{
+                                    return '';
+                                }
+                                
+                            })
+                            ->addColumn('select', function(Recipe $data) {
+                                return 
+                                '<label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" class="sub_select" data-id="'.$data->id.'" > 
+                                    <span></span>
+                                </label>';
+                            })
+                            ->editColumn('cuisines_id', function (Recipe $data) {
+                                 $cuisine_id=json_decode($data->cuisines_id);
+                                 if($cuisine_id){
+                                    $data=SubCategory::whereIn('id',$cuisine_id)->get();
+                                         return $data->map(function(Subcategory $data) {
+                                
+                                        return $data->name;
+                                    
+                                    })->implode(',');
+                                 }
+                                 else{
+                                    return "Not added";
+                                 }
+                               
+                            })
+                            ->editColumn('recipes_id', function (Recipe $data) {
+                                 $recipes_id=json_decode($data->recipes_id);
+                                 if($recipes_id){
+                                    $data=SubCategory::whereIn('id',$recipes_id)->get();
+                                         return $data->map(function(Subcategory $data) {
+                                
+                                        return $data->name;
+                                    
+                                    })->implode(',');
+                                 }
+                                 else{
+                                    return "Not added";
+                                 }
+                               
+                            })
                             ->editColumn('photo', function(Recipe $data) {
                                 $photo = $data->photo ? url('assets/images/recipe/'.$data->photo):url('assets/images/noimage.png');
                                 return '<img class="img-thumbnail img-responsive" src="' . $photo . '" alt="Image">';
                             })
+                            
+                            // ->editColumn('cuisines_id', function(Recipe $data) {
+                            //     $photo = $data->photo ? url('assets/images/recipe/'.$data->photo):url('assets/images/noimage.png');
+                            //     return '<img class="img-thumbnail img-responsive" src="' . $photo . '" alt="Image">';
+                            // })
                             ->addColumn('status', function(Recipe $data) {
                                 $class = $data->status == 1 ? 'green' : 'red';
                                 $s = $data->status == 1 ? 'selected' : '';
@@ -34,13 +87,40 @@ class RecipeController extends Controller
                                 return '<div class="action-list"><select class="btn btn-sm btn-circle process  select droplinks '.$class.'"><option data-val="1" value="'. route('admin-recipe-status',['id1' => $data->id, 'id2' => 1]).'" '.$s.'>Activated</option><option data-val="0" value="'. route('admin-recipe-status',['id1' => $data->id, 'id2' => 0]).'" '.$ns.'>Deactivated</option>/select></div>';
                             })
                             ->addColumn('action', function(Recipe $data) {
-                                return '<div class="action-list">
-                                <a href="' . route('admin-recipe-edit',$data->id) . '" class="btn btn-outline  btn-sm blue""> <i class="fa fa-edit"></i>Edit</a>
-                                <a data-href="'.route('admin-recipe-delete',$data->id).'" class="btn btn-outline delete-data  btn-sm red" data-toggle="confirmation" data-placement="top" data-popout="true" data-id="'.$data->id.'" >
-                                    <i class="fa fa-trash"></i> Delete </a></div>';
+                                    return
+                                    '<div class="action-list">
+                                        <div class="btn-group">
+                                            <button class="btn blue-hoki dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> <i class="icon-settings"></i> Actions
+                                                <i class="fa fa-angle-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="'. route('front.recipe',$data->slug) .'">
+                                                        <i class="fa fa-eye"></i> Preview </a>
+                                                </li>
+                                                <li>
+                                                    <a href="'. route('admin-recipe-edit',$data->id) .'">
+                                                        <i class="fa fa-trash-o"></i> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a class="delete-data" data-toggle="confirmation" data-placement="top" data-popout="true" data-id="'.$data->id.'" data-href="'.route('admin-recipe-delete',$data->id).'" >
+                                                        <i class="fa fa-times"></i> Delete </a>
+                                                </li>
+                                                <li class="divider"> </li>
+                                                <li >
+                                                    <a data-toggle="modal" class="feature" href="#small" data-href="'.route('admin-recipe-highlight',$data->id).'"> Highlight Recipe </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>';
+
                             }) 
-                            ->rawColumns(['status','photo', 'action'])
+                            ->rawColumns(['select','status','photo', 'action'])
                             ->toJson(); //--- Returning Json Data To Client Side
+
+
+                             
+                            
     }
 
 
@@ -48,7 +128,9 @@ class RecipeController extends Controller
     public function index()
     {
         $datas = Recipe::orderBy('id','desc')->get();
-        return view('admin.recipe.index',compact('datas'));
+        $coursess=SubCategory::where('category_id',1)->get();
+        $cuisiness=SubCategory::where('category_id',2)->get();
+        return view('admin.recipe.index',compact('datas','coursess','cuisiness'));
     }
 
     public function create($value='')
@@ -110,6 +192,8 @@ class RecipeController extends Controller
         else{
             $input['recipes_id']=null;
         }
+        $input['publish_check']=$request->publish_check;
+        $input['updated_check']=$request->updated_check;
 
 
 
@@ -152,6 +236,7 @@ class RecipeController extends Controller
     //*** POST Request
     public function update(Request $request, $id)
     {   
+        // dd($request->publish_check);
         $rules = [
                'photo'      => 'mimes:jpeg,jpg,png,svg',
                'slug' => 'unique:recipes,slug,'.$id.'|regex:/^[a-zA-Z0-9\s-]+$/',
@@ -191,14 +276,15 @@ class RecipeController extends Controller
             {              
                 $name = time().$file->getClientOriginalName();
                 $file->move('assets/images/recipe_video',$name);
-                if($data->image != null)
+                if($data->video != null)
                 {
                     if (file_exists(public_path().'/assets/images/recipe_video/'.$data->video)) {
                         unlink(public_path().'/assets/images/recipe_video/'.$data->video);
                     }
                 }            
             $input['video'] = $name;
-            } 
+            }
+
             if($request->video_link){
                 $input['video'] = null;
             }
@@ -215,6 +301,8 @@ class RecipeController extends Controller
             else{
                 $input['recipes_id']=null;
             }
+            $input['publish_check']=$request->publish_check;
+            $input['updated_check']=$request->updated_check;
 
 
 
@@ -249,11 +337,20 @@ class RecipeController extends Controller
     public function destroy($id)
     {
         $data = Recipe::findOrFail($id);
+       
+       if($data->photo != null)
+        {
+            if (file_exists(public_path().'/assets/images/recipe/'.$data->photo)) {
+                unlink(public_path().'/assets/images/recipe/'.$data->photo);
+            }
+        } 
+        if($data->video != null)
+        {
+            if (file_exists(public_path().'/assets/images/recipe_video/'.$data->video)) {
+                unlink(public_path().'/assets/images/recipe_video/'.$data->video);
+            }
+        }    
 
-        // If Photo Exist
-        if (file_exists(public_path().'/assets/images/articles/'.$data->photo)) {
-            unlink(public_path().'/assets/images/articles/'.$data->photo);
-        }
         $data->ingredients()->delete();
         $data->delete();
         //--- Redirect Section     
@@ -272,6 +369,101 @@ class RecipeController extends Controller
        
     }
 
+      //*** GET Request Status
+    public function highlight($id)
+    {
+        $data = Recipe::findOrFail($id);
+        return view('admin.recipe.highlight',compact('data'));
+       
+    }
+
+
+    public function highlightupdate(Request $request,$id)
+    {
+
+        $data = Recipe::findOrFail($id);
+         $input = $request->all();
+            if($request->is_featured == "")
+            {
+                $input['is_featured'] = 0;
+            }
+            if($request->is_trending == "")
+            {
+                $input['is_trending'] = 0;
+            }
+        $data->update($input);
+        $msg = 'Highlight Updated Successfully.';
+        return response()->json($msg);
+       
+    }
+
+
+
+    public function bulkedit(Request $request)
+    {   
+
+        $action=$request->bulkEditRadios;
+        $ids = explode(',',$request->data_ids);
+        if($ids && $action){
+            if($action==1){
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'author_check' =>$request->author_check,
+                     'author_name' => $request->author_name,
+                     'author_link' => $request->author_link,
+                ]);
+             }
+
+            if($action==2){
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'serving' =>$request->serving,
+                    'serving_text' => $request->serving_text,
+                ]);
+             }
+            if($action==3){
+                 $data=Recipe::whereIn('id',$ids)->update(['status' =>$request->status ]);
+             }
+
+
+            if($action==4){
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'publish_check' =>$request->publish_check==9?0:1,
+                    'publish_date' => $request->publish_date,
+                ]);
+
+             }
+
+            if($action==5){
+
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'updated_check' =>$request->updated_check==9?0:1,
+                    'updated_date' => $request->updated_date,
+                ]);
+             }
+
+            if($action==6){
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'is_featured' =>$request->is_featured?1:0,
+                    'is_trending' => $request->is_trending?1:0,
+                ]);
+             }
+            if($action==7){
+                 $data=Recipe::whereIn('id',$ids)->delete();
+             }
+
+
+            $msg = 'Data Updated Successfully.';
+            return response()->json($msg); 
+         }  
+         else{
+             return response()->json(array('errors' =>'Something Went Wrong ! '));
+         }     
+       
+    }
 
 
 }

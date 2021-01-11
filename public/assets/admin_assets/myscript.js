@@ -21,6 +21,23 @@ function enablekey()
 }
 
 
+    $("#sidebare a").each(function() {
+      var pageUrl = window.location.href.split(/[?#]/)[0];
+      // alert(5);
+      if (this.href == pageUrl) {
+        var page_name=$(this).find('.title').text();
+       
+           document.title =page_name+' — Admin Panel' ;
+        }
+
+
+        else{
+          var page_name=$('.caption-subject').text();
+          document.title =page_name+' — Admin Panel' ;
+        }
+      
+    });
+
 
     // Text Editor
 
@@ -45,6 +62,28 @@ function enablekey()
         $(this).parent().hide();
       });
 // **************************************  AJAX REQUESTS SECTION *****************************************
+
+
+// FEATURE OPERATION
+
+    $(document).on('click','.feature',function(){
+
+      $('.ajax-loader').show();
+
+      // $('#modal2').find('.modal-title').html($('#headerdata').val()+' Highlight');
+      $('#small .ajax-d-content').html('').load($(this).attr('data-href'),function(response, status, xhr){
+          if(status == "success")
+          {
+            if(admin_loader == 1)
+              {
+                $('.ajax-loader').hide();
+              }
+          }
+        });
+    });
+
+
+
 
   // Status Start
       $(document).on('change','.droplinks',function () {
@@ -482,7 +521,7 @@ if(admin_loader == 1)
             $('.submit-loader').hide();
           }
             $('button.addProductSubmit-btn').prop('disabled',false);
-            $('#modal1,#modal2,#verify-modal').modal('hide');
+            $('#small').modal('hide');
 
            }
           enablekey();
@@ -491,6 +530,47 @@ if(admin_loader == 1)
       });
 
 });
+
+
+$(document).on('submit','#blogSlugUpdate',function(e){
+e.preventDefault();
+    $.ajax({
+     method:"POST",
+     url:$(this).prop('action'),
+     data:new FormData(this),
+     dataType:'JSON',
+     contentType: false,
+     cache: false,
+     processData: false,
+     success:function(data)
+     {
+        if ((data.errors)) {
+          for(var error in data.errors)
+          {
+            toastr.error(data.errors[error]);
+          }  
+              var orig_val=$('#blog-slug-hid').val();
+              $('#blog-slug-in').val(orig_val);   
+        }
+        else
+        {
+          toastr.success("Slug Updated Successfully");
+          $('#blog-slug-in').val(data);
+          $('#blog-slug-hid').val(data);
+
+        }
+     }
+    });
+    $('#blog-slug-in').prop('disabled',true);
+     $('#blog-slug').text('Edit Slug!');
+    // $('#blog-slug').prop('disabled',true);
+
+});
+
+
+
+
+
 
 
 // ADD / EDIT FORM SUBMIT FOR DATA TABLE ENDS

@@ -7,18 +7,18 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="author" content="">
-       @if(isset($data->seo_check) )
+       @if(isset($data) && isset($data->seo_check) && $data->seo_check==1 )
         <meta name="keywords" content="{{ !empty($data->meta_tag) ? $data->meta_tag:  $gs->meta_keys}}">
 
         <meta name="description" content="{{ $data->meta_desc != null ? $data->meta_desc : '' }}">
         
-        <title> {{ !empty($data->meta_title) ? $data->meta_title:  $gs->title}}  </title>
+        <title> {{ !empty($data->meta_title) ? ($data->meta_title .' — '. $gs->title) :  $gs->title}}  </title>
       @else
 
       <meta name="keywords" content="{{ $gs->meta_keys }}">
       <meta name="description" content="Ofrecipes">
 
-      <title>{{$gs->title}}</title>
+      <title> @yield('title') {{$gs->title}}</title>
       @endif
 
     <link rel="icon"  type="image/x-icon" href="{{asset('assets/images/'.$gs->favicon)}}"/>

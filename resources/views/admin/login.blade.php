@@ -84,7 +84,7 @@
             <!-- BEGIN REGISTRATION FORM -->
 
         </div>
-        <div class="copyright"> {{ now()->year }} © All Rights Reseverd by {{$gs->web_name}} </div>
+        <div class="copyright"> {{ now()->year }} © All Rights Reseverd by <a href="{{route('front.index')}}"> {{$gs->web_name}} </a></div>
         <!--[if lt IE 9]>
         <script src="../assets/global/plugins/respond.min.js"></script>
         <script src="../assets/global/plugins/excanvas.min.js"></script> 

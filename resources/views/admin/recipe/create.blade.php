@@ -12,7 +12,7 @@
 @section('page_content')
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content">
-        <!-- BEGIN PAGE HEAD-->
+        <!-- BEGIN PAGE HEAD--> 
 
     <div class="portlet light bordered">
         <div class="portlet-title">
@@ -40,16 +40,26 @@
                 <div class="portlet-body">
 
                     <form class="form-horizontal rc-form" action="{{route('admin-recipe-store')}}" id="geniusform" method="post" enctype="multipart/form-data" role="form">
+                       <div class="side-btn-save">
+                           <div>
+                               <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
+                                <i class="fa fa-check"></i> Save </button>
+                           </div>
+                       </div>
+
                         @csrf
                         @include('includes.admin.form-both')
 
                         <div class="btn-group pointed-btn-g" style="float: right;">
                             <a  type="button" data-id="section-1"  class="btn btn-default">
                                  Import</a>
-                            <a type="button" data-id="section-2" class="btn btn-default">
-                                 Media</a>
+                            <a type="button" data-id="section-11" class="btn btn-default">
+                                Detail</a>
+                            
                             <a type="button" data-id="section-3" class="btn btn-default">
                                  General</a>
+                            <a type="button" data-id="section-2" class="btn btn-default">
+                                 Media</a>
                             <a type="button" data-id="section-4" class="btn btn-default">
                                  Times</a>
                             <a type="button" data-id="section-5" class="btn btn-default">
@@ -64,8 +74,7 @@
                                 Nutritions</a>  
                             <a type="button" data-id="section-10" class="btn btn-default">
                                 Notes</a>
-                            <a type="button" data-id="section-11" class="btn btn-default">
-                                Detail</a>       
+                                   
                         </div>
                         <br>
                         <br>
@@ -87,51 +96,18 @@
                             </div>
                         </div>
 
-                        <div class="rc-section section-2">
-                            <h4>Media</h4>
+                        <div class="rc-section section-11">
+                            <h4>Detailed Description</h4>
                              <hr>
                             <div class="form-group last">
-                                <label class="control-label col-md-3">Recipe Image</label>
-                                <div class="col-md-3">
-                                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
-                                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                                        <div>
-                                            <span class="btn default btn-file">
-                                                <span class="fileinput-new"> Select image </span>
-                                                <span class="fileinput-exists"> Change </span>
-                                                <input type="file" name="photo"> </span>
-                                            <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
-                                        </div>
-                                    </div>                                    
-                                </div>
-                                <label class="control-label col-md-2">Recipe Video</label>
-                                <div class="col-md-3 ">
-                                    <div class="d-inline-flex">                                        
-                                        <div class="fileinput fileinput-new" id="rc-vd-div" data-provides="fileinput">
-                                            <span class="btn green btn-file">
-                                                <span class="fileinput-new"><i class="fa fa-upload"></i> Video </span>
-                                                <span class="fileinput-exists"> Change </span>
-                                                <input type="file" name="video"> </span>
-                                            <span class="fileinput-filename"> </span> &nbsp;
-                                            <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>
-                                        </div>
+                                <label class="col-md-3 control-label" >Recipe Detailed Description</label>
+                                <div class="col-md-8">
 
-                                        <div class="fileinput" id="rc-em-div">
-                                            <a href="javascript:;" class="input-group-addon btn grey-cascade" id="rc-em-link-sbtn"> <i class="fa fa-link text-white"></i> Embed Video </a>
-                                        </div>
-
-
-                                    </div>
-                                    <div id="rc-em-link">
-                                        <textarea name="video_link" class="form-control h-100 em-link-t" placeholder="Use URL to the video (e.g. https://www.youtube.com/embed/dQw) or the full embed code."></textarea>
-                                        <a href="javascript:;" id="rc-em-link-rbtn" >Remove Video</a>
-                                    </div>
-                                </div>
-
+                                   <textarea class="nic-edit"  name="detail_desc" ></textarea>
+               
+                                </div> 
                             </div>
-                        </div>
+                        </div>  
 
                         <div class="rc-section section-3">
                             <h4>General</h4>
@@ -209,16 +185,103 @@
                                 </div>
                             </div>
 
-                            <div class="row"> 
+                                                   
 
-                                <label class="col-md-3 control-label" >Publish Date</label>
-                                <div class="col-md-4 d-inline-flex">
-                                    <input class="input-group form-control form-control-inline" type="date" value="01/08/2016" name="publish_date" id="pb-date" > 
-               
+                            <div class="row mb-10"> 
+
+                                <label class="col-md-3 control-label" >Allow Publish Date</label>
+                                <div class="col-md-4 d-inline-flex mt-5">
+                                     <label class="mt-checkbox">
+                                        <input type="checkbox" id="publish-check" value="1" class="form-control" name="publish_check"> <span></span>
+                                                                                                
+                                    </label>
+                                                   
                                 </div>
                             </div>
 
+                           <div class="custom-publish-date" id="custom-publish-date">
+                                <div class="row"> 
+
+                                    <label class="col-md-3 control-label fw-200" >Publish Date</label>
+                                    <div class="col-md-4 d-inline-flex">
+                                        <input class="pb-date input-group form-control form-control-inline" type="date" value="01/08/2016" name="publish_date" > 
+                   
+                                    </div>
+                                </div>                                   
+                           </div>
+                            <div class="row mb-10"> 
+
+                                <label class="col-md-3 control-label" >Allow Updated Date</label>
+                                <div class="col-md-4 d-inline-flex mt-5">
+                                     <label class="mt-checkbox">
+                                        <input type="checkbox" id="updated-check" value="1" class="form-control" name="updated_check"> <span></span>
+                                                                                                
+                                    </label>
+                                                   
+                                </div>
+                            </div>
+
+                           <div class="custom-updated-date" id="custom-updated-date">
+                                <div class="row"> 
+
+                                    <label class="col-md-3 control-label fw-200" >Updated Date</label>
+                                    <div class="col-md-4 d-inline-flex">
+                                        <input class="input-group form-control form-control-inline up-date" type="date" value="01/08/2016" name="updated_date"  > 
+                   
+                                    </div>
+                                </div>                               
+                           </div>
+                            
+
                         </div>
+
+                        <div class="rc-section section-2">
+                            <h4>Media</h4>
+                             <hr>
+                            <div class="form-group last">
+                                <label class="control-label col-md-3">Recipe Image</label>
+                                <div class="col-md-3">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                        <div>
+                                            <span class="btn default btn-file">
+                                                <span class="fileinput-new"> Select image </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                <input type="file" name="photo"> </span>
+                                            <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <label class="control-label col-md-2">Recipe Video</label>
+                                <div class="col-md-3 ">
+                                    <div class="d-inline-flex">                                        
+                                        <div class="fileinput fileinput-new" id="rc-vd-div" data-provides="fileinput">
+                                            <span class="btn green btn-file">
+                                                <span class="fileinput-new"><i class="fa fa-upload"></i> Video </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                <input type="file" name="video"> </span>
+                                            <span class="fileinput-filename"> </span> &nbsp;
+                                            <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>
+                                        </div>
+
+                                        <div class="fileinput" id="rc-em-div">
+                                            <a href="javascript:;" class="input-group-addon btn grey-cascade" id="rc-em-link-sbtn"> <i class="fa fa-link text-white"></i> Embed Video </a>
+                                        </div>
+
+
+                                    </div>
+                                    <div id="rc-em-link">
+                                        <textarea name="video_link" class="form-control h-100 em-link-t" placeholder="Use URL to the video (e.g. https://www.youtube.com/embed/dQw) or the full embed code."></textarea>
+                                        <a href="javascript:;" id="rc-em-link-rbtn" >Remove Video</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
 
                         <div class="rc-section section-4" id="section-4">
                             <h4>Times</h4>
@@ -391,20 +454,7 @@
                
                                 </div> 
                             </div>
-                        </div>
-
-                        <div class="rc-section section-11">
-                            <h4>Detailed Description</h4>
-                             <hr>
-                            <div class="form-group last">
-                                <label class="col-md-3 control-label" >Recipe Detailed Description</label>
-                                <div class="col-md-8">
-
-                                   <textarea class="nic-edit"  name="detail_desc" ></textarea>
-               
-                                </div> 
-                            </div>
-                        </div>                        
+                        </div>                      
 
                         <div class="rc-section section-12">
                             <h4>Seo tools</h4>
@@ -611,24 +661,6 @@
 
 
 
-    // Today's Date in datetimepicker Javascript
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
-    var yyyy = today.getFullYear();
-    if(dd<10){
-      dd='0'+dd
-    } 
-    if(mm<10){
-      mm='0'+mm
-    } 
-
-    today = yyyy+'-'+mm+'-'+dd;
-    document.getElementById("pb-date").setAttribute("min", today); 
-    document.getElementById("pb-date").setAttribute("value", today);
-
-    // Today's Date in datetimepicker Javascript ends
-
 
   $(document).ready(function() {
       $("#rc-em-link-sbtn").on('click',function(){
@@ -785,6 +817,35 @@ $( document ).ready(function() {
 
 
 </script>
+<script>
+    $(document).ready(function()
+    {
+        $("#publish-check").on( "change", function() {
+            if(this.checked){
+             $('#custom-publish-date').removeClass('custom-publish-date');
+             $('.pb-date').attr('required',true);
+            }
+            else{
+              $('#custom-publish-date').addClass('custom-publish-date');
+              $('.pb-date').attr('required',false);
+                            
+            }
 
+          });
+          $("#updated-check").on( "change", function() {
+            if(this.checked){
+             $('#custom-updated-date').removeClass('custom-updated-date');
+             $('.up-date').attr('required',true);
+             
+            }
+            else{
+              $('#custom-updated-date').addClass('custom-updated-date');
+                 $('.up-date').attr('required',false);           
+            }
+
+          });
+
+    })
+</script>
 
 @endsection

@@ -51,6 +51,57 @@
                         </div>                        
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        <div class="form-group last">
+                            <label class="control-label col-md-3">Detail</label>
+                            <div class="col-md-8">
+                                  <textarea name="detail_desc" class="nic-edit" style="width: 100%;">
+                                  </textarea>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" class="seocheck"  value="1" name="seo_check" >{{ __('Allow Page SEO') }}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="seofields" id="seofield">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" >Meta Title</label>
+                            <div class="col-md-8 d-inline-flex">
+                                <input  type="text" class="form-control"  name="meta_title"  >  
+           
+                            </div>                        
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" >Meta tags</label>
+                            <div class="col-md-8 d-inline-flex">
+                                <input  type="text" class="form-control" data-role="tagsinput" name="meta_tag"  >  
+           
+                            </div>                        
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" >Meta description</label>
+                            <div class="col-md-8 d-inline-flex">
+                                <input  type="text" class="form-control"  name="meta_desc" >         
+                            </div>                        
+                        </div>
+                    </div>
+
+
 
                 </div>
                 <div class="form-actions">

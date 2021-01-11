@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Banner;
 use App\Models\BlogCategory;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Generalsetting;
 use App\Models\Partner;
@@ -17,9 +18,10 @@ use App\Models\Reply;
 use App\Models\Slider;
 use App\Models\SubCategory;
 use App\Models\Subscriber;
+use Auth;
 use Illuminate\Http\Request;
-use Validator;
 use Illuminate\Support\Facades\Mail;
+use Validator;
 // use Illuminate\Routing\Route;
 
 
@@ -37,52 +39,160 @@ class HomeController extends Controller
 
         $partners=Partner::all();
         $about = PgAbout::findOrFail(1);
-        $date = today()->format('Y-m-d');
 
-        $recipes=Recipe::where('status',1)->where('publish_date','<=',$date)->orderBy('id', 'desc')->take(10)->get();
-
-    	return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','blog_popular','courses','cuisines','partners','about','recipes'));
+        $recipes=Recipe::where('is_featured',1)->where('status',1)->orderBy('id', 'desc')->get();
+         $page_no=1;
+    	return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','blog_popular','courses','cuisines','partners','about','recipes','page_no'));
     }
+
+
+    public function category($slug)
+    {     
+
+        $data=Category::where('slug',$slug)->first();
+        $datas=SubCategory::where('category_id',$data->id)->where('status',1)->paginate(30); 
+
+        $page_no=2; 
+        if($datas)  {
+            return view('front.category',compact('datas','data','page_no'));
+        }  
+        else{
+            return view('errors.404');
+        }            
+        
+    }
+
+
+
+    public function categorydetail($slug1='',$slug2='')
+    {   
+        if(\Route::current()->getName() == 'front.recipe.all'){
+            $datas=Recipe::where('status',1)->paginate(10);
+            $data='';
+            $ad_check=1;
+            return view('front.category-detail',compact('datas','data','ad_check'));
+        }
+        $main_cat=Category::where('slug',$slug1)->first();
+        $sub=SubCategory::where('slug',$slug2)->first();
+        $data=$sub;
+
+        $datas='';        
+        if ($sub) {                          
+            $ids=[];
+               $recipes=Recipe::where('recipes_id','!=',null)->where('recipes_id','!=','')->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
+                if($main_cat->id==2){ 
+                    foreach ($recipes as $datawise) {
+                        $r_id=json_decode($datawise->cuisines_id);
+
+                        if($r_id && in_array($sub->id,$r_id)){
+                        $ids[]=$datawise->id ;                                       
+                        }
+                    }                  
+                }
+                else{
+                        foreach ($recipes as $datawise) {
+
+                            $r_id=json_decode($datawise->recipes_id); 
+
+                            if($r_id && in_array($sub->id,$r_id)){
+                            $ids[]=$datawise->id ;                                       
+                            }                  
+                        } 
+                }
+      
+            $datas=Recipe::where('status',1)->whereIn('id',$ids)->paginate(10);
+          
+          }
+          
+          if($datas){
+            $page_no=3;
+            return view('front.category-detail',compact('datas','data','page_no'));
+          }
+          else{
+            return view('errors.404');
+          }
+        
+    }
+
+    public function RecipeSearch(Request $request)
+    {
+
+       $search=$request->search;
+       $datas=Recipe::where('name', 'like', '%' . $search . '%')->where('status',1)->paginate(10);
+            $data='';
+       if($datas){
+        $ad_check=1;
+        return view('front.category-detail',compact('datas','data','search','ad_check'));
+       }
+       
+    }
+
+
     public function recipedetail($slug)
     {
-        $date = today()->format('Y-m-d');
-    	$data=Recipe::where('publish_date','<=',$date)->where('slug','=',$slug)->where('status',1)->first();
+       
+        if(Auth::guard('admin')->check()){
+           $data=Recipe::where('slug','=',$slug)->first(); 
+        }
+        else{
+           $data=Recipe::where('slug','=',$slug)->where('status',1)->first(); 
+        }
+
+    	
         if($data){
            $data->views = $data->views + 1;
-           $data->update(); 
+           $data->update();
+           $page_no=4; 
+           return view('front.recipe-detail',compact('data','page_no'));
         }
-    	return view('front.recipe-detail',compact('data'));
+        else{
+            return view('errors.404');
+        }
+    	
     }
 
     public function printpage($slug)
     {
-        $date = today()->format('Y-m-d');
-        $data=Recipe::where('publish_date','<=',$date)->where('slug','=',$slug)->where('status',1)->first();
-        return view('front.recipe-print',compact('data'));
-    }    
-
-    public function blog($slug='')
-    {   
-        if($slug){
-            $bcat=BlogCategory::where('slug',$slug)->where('status',1)->first();
-            $datas=Article::where('category_id',$bcat->id)->where('status',1)->paginate(16);
-            $bslg=$bcat->slug;
+       
+        if(Auth::guard('admin')->check()){
+           $data=Recipe::where('slug','=',$slug)->first(); 
         }
         else{
-            $datas=Article::where('status',1)->paginate(16);
-            $bslg='All';
+           $data=Recipe::where('slug','=',$slug)->where('status',1)->first(); 
         }
-        
-        $b_cats=BlogCategory::where('status',1)->get();
 
-    	return view('front.blog',compact('datas','b_cats','bslg'));
-    }
-
-    public function page($slug)
-    {   
-        $data=PgOther::where('slug',$slug)->where('status',1)->first();
         if($data){
-           return view('front.about',compact('data')); 
+           return view('front.recipe-print',compact('data'));
+        }
+        else{
+            return view('errors.404');
+        }        
+    }    
+
+
+    public function page($slug,$slug2='')
+    {   
+        $data=PgOther::where('slug',$slug)->first();
+     
+        if(isset($data) && $data->id==5){
+            if($slug2){
+                $bcat=BlogCategory::where('slug',$slug2)->where('status',1)->first();
+                $datas=Article::where('category_id',$bcat->id)->where('status',1)->paginate(16);
+                $bslg=$bcat->slug;                
+            }
+            else{
+                $datas=Article::where('status',1)->paginate(16);
+                $bslg='All';
+            } 
+            $page_no=5;           
+            $b_cats=BlogCategory::where('status',1)->get();
+            return view('front.blog',compact('datas','b_cats','bslg','page_no'));
+
+        }
+
+        else if(isset($data) && $data->status==1){
+           $page_no=8;  
+           return view('front.about',compact('data','page_no')); 
         }
         else{
             return view('errors.404');
@@ -95,20 +205,32 @@ class HomeController extends Controller
     public function blogdetail($slug)
     {  
 
+        if(Auth::guard('admin')->check()){
+           $data=Article::where('slug',$slug)->first(); 
+        }
+        else{
+           $data=Article::where('slug',$slug)->where('status',1)->first();
+        }
 
-    	$data=Article::where('slug',$slug)->where('status',1)->first();
         if($data){
+           $page_no=6;
            $data->views = $data->views + 1;
            $data->update(); 
+           return view('front.blog-detail',compact('data','page_no'));
         }
+        else{
+            return view('errors.404');
+        }
+
         
-    	return view('front.blog-detail',compact('data'));
+    	
     }
 
 
 
     public function contact()
-    {    	
+    {  
+
     	return view('front.contact');
     }
 
@@ -123,12 +245,18 @@ class HomeController extends Controller
         [
             'name' => 'required',
             'email' => 'required',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'captcha' => 'required|captcha'
             
         ];
 
+        $customs = [
+               'captcha.captcha' => 'Invalid captcha code '
+                   ];
 
-        $validator = Validator::make($request->all(), $rules);
+
+
+
+        $validator = Validator::make($request->all(), $rules, $customs);
 
         if ($validator->fails()) {
           return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
@@ -157,72 +285,12 @@ class HomeController extends Controller
 
 
 
-    public function category()
-    {     
-        if(\Route::current()->getName() == 'front.cuisine'){
-        $datas=SubCategory::where('category_id',2)->where('status',1)->paginate(30);
-        }
-        else{
-        $datas=SubCategory::where('category_id',1)->where('status',1)->paginate(30); 
-        }
-        
-          
-        return view('front.category',compact('datas'));
-    }
 
-
-
-    public function categorydetail($slug='')
-    {   $date = today()->format('Y-m-d');
-        if(\Route::current()->getName() == 'front.recipe.all'){
-            $datas=Recipe::where('publish_date','<=',$date)->where('status',1)->paginate(10);
-            $cat='';
-            return view('front.category-detail',compact('datas','cat'));
-        }
-
-        $sub=SubCategory::where('slug',$slug)->first();
-        $cat=$sub->name;
-        $datas='';        
-        if ($sub) {                          
-            $ids=[];
-            if(\Route::current()->getName() == 'front.cuisine.detail'){
-               $recipes=Recipe::where('publish_date','<=',$date)->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
-            }
-            else{
-               $recipes=Recipe::where('publish_date','<=',$date)->where('recipes_id','!=',null)->where('recipes_id','!=','')->get();
-            }
-                              
-                foreach ($recipes as $data) {
-                    if(\Route::current()->getName() == 'front.cuisine.detail'){
-                    $r_id=json_decode($data->cuisines_id);
-                    }
-                    else{
-                       $r_id=json_decode($data->recipes_id); 
-                    }
-
-                    if($r_id && in_array($sub->id,$r_id)){
-                    $ids[]=$data->id ;                                       
-                }                  
-            }       
-            $datas=Recipe::where('status',1)->whereIn('id',$ids)->paginate(10);
-          
-          }
-        return view('front.category-detail',compact('datas','cat'));
-    }
-
-    public function RecipeSearch(Request $request)
-    {
-        $date = today()->format('Y-m-d');
-       $search=$request->search;
-       $datas=Recipe::where('publish_date','<=',$date)->where('name', 'like', '%' . $search . '%')->where('status',1)->paginate(10);
-            $cat='';
-
-       return view('front.category-detail',compact('datas','cat','search'));
-    }
     public function about()
     {      
         $data=PgAbout::first(); 
-        return view('front.about',compact('data'));
+        $page_no=7;
+        return view('front.about',compact('data','page_no'));
     }
 
     // ------------------ Rating SECTION --------------------
@@ -356,7 +424,10 @@ class HomeController extends Controller
         $subscribe->save();
         return response()->json('You Have Subscribed Successfully.');
     }
-
-
+    public function loadCaptcha($value='')
+    {
+        return response()->json(['captcha'=> captcha_img()]);
+    }
+    
 
 }

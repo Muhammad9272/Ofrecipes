@@ -1,10 +1,6 @@
                 <div class="ps-post">
                     <div class="ps-post__content ">
                         <div class="ps-post__meta recip-detail">
-						   {{--  <form class="ps-form--quick-search" action="index.html" method="get">
-				              <input class="form-control " type="text" placeholder="Search recipe">
-				              <button><i class="fa fa-search" aria-hidden="true"></i></button>
-				            </form> --}}
 				            <h3 class="ngmr">About me</h3>
                         </div>
                     </div>
@@ -29,7 +25,7 @@
            				<div class="e-content">
            					<h3>Get a Free eCookbook!</h3>
            					<p class="sp-txt">
-                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim erat non velit pellentesque</p>
+                             {{$gs->eCookbook}}</p>
                              <h4 class="mt-20 mb-20">Your Details</h4>
            					<form class="e-book-form subscribeform" action="{{route('front.subscribe')}}"  method="post">
            						@csrf

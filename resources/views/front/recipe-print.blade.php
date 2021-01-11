@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <title>{{$gs->title}}</title>
+    <title>Print Recipe — {{$gs->title}}</title>
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700&amp;amp;subset=latin-ext" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/front/plugins/font-awesome/css/font-awesome.min.css')}}">
     
@@ -77,7 +77,7 @@
                             @if($data->author_check==2)
                               <a class="text-danger mb-10 ppn" href="{{$data->author_link}}">{{$data->author_name}}</a>
                               @else
-                              <a class="text-danger mb-10 ppn" href="{{route('front.about')}}">{{$gs->name}}</a>
+                              <a class="text-danger mb-10 ppn" href="{{$gs->author_link}}">{{$gs->author_name}}</a>
                               @endif
                             
                             <p class="sp-txt">
@@ -307,10 +307,10 @@
                                 <i class="fa fa-instagram" style="font-size: 60px" aria-hidden="true"></i>
                               </span>
                               <span class="end-content">
-                                <span>Tried this recipe?</span>
-                                <span class="ppn">Mention 
-                                  <a class="ppn" href="{{ App\Models\Socialsetting::find(1)->instagram }}">{{$gs->title}}</a>  or tag 
-                                  <a class="ppn" href="{{ App\Models\Socialsetting::find(1)->instagram }}">#{{$gs->title}}!</a></span>
+                                <span class="tried">Tried this recipe?</span>
+                                <span class="ppn">
+                                  {!! $gs->recipe_tag !!}
+                                </span>
                               </span>
                             </div>
                           </div>

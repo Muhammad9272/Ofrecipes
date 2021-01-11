@@ -1,4 +1,5 @@
 @extends('front.layouts.app')
+@section('title', 'Contact — ')
 @section('page_content')
     <div class="ps-breadcrumb">
       <div class="container def-pad">
@@ -49,9 +50,30 @@
 
 			                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
 			                            <div class="form-group">
-			                              <textarea class="form-control ppn" required="" name="text" rows="5" placeholder="Message"></textarea>
+			                              <textarea class="form-control ppn " required="" name="text" rows="5" placeholder="Message"></textarea>
 			                            </div>
 			                          </div>
+
+			                          
+                                     
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+
+						                  <div class="form-group">
+						                      <label for="password" class=" control-label">Captcha</label>
+
+
+						                      <div class="col-md-4">
+						                          <div class="captcha">
+						                          <span>{!! captcha_img() !!}</span>
+						                          <a data-href="{{route('load-new-captcha')}}"
+						                           type="button" href="#" id="reload-cap"  class="btn btn-success btn-refresh"><i class="fa fa-refresh"></i></a>
+						                          </div>
+						                          <input id="captcha" type="text" class="form-control mt-20" placeholder="Enter Captcha" name="captcha">
+						                      </div>
+						                  </div>
+					                </div>
+
+
 			            </div>
 			            <div class="form-group submit">
 			              <button class="ps-btn submit-btn">Send message</button>
@@ -72,4 +94,19 @@
     </div>
 
 
+@endsection
+ @section('pagelevel_scripts')
+<script type="text/javascript">
+    $('#reload-cap').click(function (e) {
+    	e.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url:$(this).attr('data-href'),
+            success: function (data) {
+                $(".captcha span").html(data.captcha);
+            }
+        });
+    });
+
+</script>
 @endsection

@@ -1,5 +1,56 @@
-    <header class="header header--furniture " data-sticky="false">
-      <div class="header__top ">
+    <header class="header header--furniture " data-sticky="true">
+      @if(Auth::guard('admin')->check())
+      <div class="header--standard head-adv" >
+        <div class="header__top">
+          <div class="container def-pad">
+            <div class="header__left">
+              <p>Hi {{ Auth::guard('admin')->user()->name}}, Welcome to {{$gs->title}} !</p>
+            </div>
+            <div class="header__right">
+              <ul class="header__top-links">
+                <li><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
+                <li><a href="{{route('admin-recipe-create')}}"><i class="fa fa-plus"></i>&nbsp;Recipe</a></li>
+                <li><a href="{{route('admin-article-create')}}"><i class="fa fa-plus"></i>&nbsp;Blog</a></li>
+
+                @if(isset($page_no))
+                <li>
+                  @if($page_no==1)
+                  <a href="{{route('admin.gs.edit')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==2)
+                  <a href="{{route('admin-cat-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==3)
+                  <a href="{{route('admin-subcat-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>                  
+                  @elseif($page_no==4)
+                  <a href="{{route('admin-recipe-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==5)
+                  <a href="{{route('admin-article-index')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==6)
+                  <a href="{{route('admin-article-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==7)
+                  <a href="{{route('admin-about-index')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==8)
+                  <a href="{{route('admin-pgother-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @endif                  
+                </li>
+                @endif
+
+
+                <li>
+                  <div class="ps-dropdown language cus-drop"><a href="#">{{ Auth::guard('admin')->user()->name}}<img class="img-admin" src="{{asset('assets/images/admins/'.Auth::guard('admin')->user()->photo)}}" alt=""></a>
+                    <ul class="ps-dropdown-menu">
+                      <li><a href="{{route('admin.profile')}}"><i class="fa fa-edit"></i> Edit Profile</a></li>
+                      <li><a href="{{route('admin.logout')}}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      <div class="header__top">
         <div class="container def-pad">
           <div class="header__left"><a class="ps-logo" href="{{route('front.index')}}"><img src="{{asset("assets/images/recipe/logo/".$gs->logo)}}" style="width: 140px" alt=""></a>
 
@@ -12,30 +63,27 @@
                                     <div class="{{request()->is('/')?'menu-border':''}}"></div>
                                                 
                                   </li>
-                                  <li class="menu-item-has-children "><a href="{{route('front.category')}}">Recipe Types</a>
-                                    <div class="{{ (request()->is('category/recipe*')) || (request()->is('recipe*'))? 'menu-border' : '' }}"></div>
+
+                                  @foreach($rc_cats as $key=>$rc_cat)
+                                  <li class="menu-item-has-children "><a href="{{route('front.category',$rc_cat->slug)}}">{{$rc_cat->name}}</a>
+                                    @if($key==0)
+                                    <div class="{{request()->is('category/recipe*') || isset($ad_check) || (isset($page_no) &&  $page_no==4)?'menu-border':''}}"></div>
+                                    @elseif($key==1)
+                                     <div class="{{request()->is('category/cuisine*')?'menu-border':''}}"></div>
+                                    @endif
                                       <span class="sub-toggle"></span>
                                        <ul class="sub-menu">
-                                                    @foreach($rc_subs->where('category_id',1) as $rc_sub)
-                                                    <li><a href="{{route('front.category.detail',$rc_sub->slug)}}">{{$rc_sub->name}}</a>
+                                                    @foreach($rc_cat->subs as $rc_sub)
+                                                    <li><a href="{{route('front.category.detail',['slug1'=>$rc_cat->slug,'slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
                                                     </li>
                                                     @endforeach
                                         </ul>
 
                                   </li>
-                                  <li class="menu-item-has-children"><a href="{{route('front.cuisine')}}">Cuisines</a>
-                                    <div class="{{request()->is('category/cuisine')?'menu-border':''}}"></div>
+                                  @endforeach
 
-                                      <span class="sub-toggle"></span>
-                                       <ul class="sub-menu">
-                                                    @foreach($rc_subs->where('category_id',2) as $rc_sub)
-                                                    <li><a href="{{route('front.cuisine.detail',$rc_sub->slug)}}">{{$rc_sub->name}}</a>
-                                                    </li>
-                                                    @endforeach
-                                        </ul>
-                                  </li>
-                                  <li class="menu-item-has-children "><a href="{{route('front.blog')}}">Blog</a>
-                                    <div class="{{request()->is('blog*')?'menu-border':''}}"></div>
+                                  <li class="menu-item-has-children "><a href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a>
+                                    <div class="{{request()->is('*blog*')?'menu-border':''}}"></div>
                                    
 
                                   </li>
@@ -58,6 +106,58 @@
 
     </header>
     <header class="header header--mobile furniture" data-sticky="false">
+
+      @if(Auth::guard('admin')->check())
+      <div class="header--standard head-adv">
+        <div class="header__top head-adv-top">
+          <div class="container def-pad">
+            <div class="header__left">
+              <p>Hi {{ Auth::guard('admin')->user()->name}}, Welcome to {{$gs->title}} !</p>
+            </div>
+            <div class="header__right">
+              <ul class="header__top-links">
+                <li><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
+                <li><a href="{{route('admin-recipe-create')}}"><i class="fa fa-plus"></i>&nbsp;Recipe</a></li>
+                <li><a href="{{route('admin-article-create')}}"><i class="fa fa-plus"></i>&nbsp;Blog</a></li>
+
+                @if(isset($page_no))
+                <li>
+                  @if($page_no==1)
+                  <a href="{{route('admin.gs.edit')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==2)
+                  <a href="{{route('admin-cat-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==3)
+                  <a href="{{route('admin-subcat-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>                  
+                  @elseif($page_no==4)
+                  <a href="{{route('admin-recipe-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==5)
+                  <a href="{{route('admin-article-index')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==6)
+                  <a href="{{route('admin-article-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==7)
+                  <a href="{{route('admin-about-index')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==8)
+                  <a href="{{route('admin-pgother-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @endif                  
+                </li>
+                @endif
+
+
+                <li>
+                  <div class="ps-dropdown language cus-drop"><a href="#">{{ Auth::guard('admin')->user()->name}}<img class="img-admin" src="{{asset('assets/images/admins/'.Auth::guard('admin')->user()->photo)}}" alt=""></a>
+                    <ul class="ps-dropdown-menu">
+                      <li><a href="{{route('admin.profile')}}"><i class="fa fa-edit"></i> Edit Profile</a></li>
+                      <li><a href="{{route('admin.logout')}}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
       <div class="container def-pad">
         <div class="navigation--mobile">
 
@@ -102,27 +202,22 @@
           <ul class="menu--mobile">
             <li class="current-menu-item menu-item-has-children"><a href="{{route('front.index')}}">Home</a>
             </li>
-            <li class="menu-item-has-children has-mega-menu"><a href="{{route('front.category')}}">Recipe Types</a>
-                          <span class="sub-toggle"></span>
-                          <ul class="sub-menu">
-                             @foreach($rc_subs->where('category_id',1) as $rc_sub)
-                                                    <li><a href="{{route('front.category.detail',$rc_sub->slug)}}">{{$rc_sub->name}}</a>
-                                                    </li>
-                             @endforeach
-                            
-                          </ul>
+
+            @foreach($rc_cats as $rc_cat)
+            <li class="menu-item-has-children has-mega-menu"><a href="{{route('front.category',$rc_cat->slug)}}">{{$rc_cat->name}}</a>
+
+                <span class="sub-toggle"></span>
+                 <ul class="sub-menu">
+                              @foreach($rc_cat->subs as $rc_sub)
+                              <li><a href="{{route('front.category.detail',['slug1'=>$rc_cat->slug,'slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
+                              </li>
+                              @endforeach
+                  </ul>
+
             </li>
-            <li class="menu-item-has-children has-mega-menu"><a href="{{route('front.cuisine')}}">Cuisines</a>
-                          <span class="sub-toggle"></span>
-                          <ul class="sub-menu">
-                             @foreach($rc_subs->where('category_id',2) as $rc_sub)
-                                                    <li><a href="{{route('front.cuisine.detail',$rc_sub->slug)}}">{{$rc_sub->name}}</a>
-                                                    </li>
-                             @endforeach
-                            
-                          </ul>
-            </li>
-            <li class="current-menu-item menu-item-has-children"><a href="{{route('front.blog')}}">Blog</a>
+            @endforeach
+
+            <li class="current-menu-item menu-item-has-children"><a href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a>
             </li>
             <li class="current-menu-item menu-item-has-children"><a href="{{route('front.contact')}}">Contact</a>
             </li>

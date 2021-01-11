@@ -82,6 +82,47 @@
                               <input type="text" name="title" class="form-control" value="{{$gs->title}}">                                 
                         </div>
                     </div>
+
+                    <div class="form-group last">
+                        <label class="control-label col-md-3"> Recipe Author(Default)</label>
+                        <div class="col-md-8">
+                              <input type="text" name="author_name" class="form-control" value="{{$gs->author_name}}">                                 
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="control-label col-md-3"> Recipe Author Link(Default)</label>
+                        <div class="col-md-8">
+                              <input type="text" name="author_link" class="form-control" value="{{$gs->author_link}}">                                 
+                        </div>
+                    </div>
+
+                    <div class="form-group last">
+                        <label class="control-label col-md-3"> eCookbook Text</label>
+                        <div class="col-md-8">
+                            <textarea style="height: 70px;" type="text" class="form-control"  name="eCookbook" required="" >
+                                {{$gs->eCookbook}}
+                            </textarea>
+                                                             
+                        </div>
+                    </div>
+
+                    <div class="form-group last">
+                        <label class="control-label col-md-3"> Recipe Card Footer Area (Tag it)</label>
+                        <div class="col-md-8">
+                            <textarea name="recipe_tag" class="nic-edit" style="width: 100%;">
+                                {!! $gs->recipe_tag !!}
+                                  </textarea>
+                                                             
+                        </div>
+                    </div>
+
+                    <div class="form-group last">
+                        <label class="control-label col-md-3">Copyrights</label>
+                        <div class="col-md-8">
+                              <input type="text" name="copyright" class="form-control" value="{{$gs->copyright}}">                                 
+                        </div>
+                    </div>
+
                     <div class="form-group last">
                         <label class="control-label col-md-3">Enter Contact us Email</label>
                         <div class="col-md-8">

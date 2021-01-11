@@ -4,7 +4,7 @@
       <div class="container def-pad">
         <ul class="breadcrumb">
           <li><a class="" href="{{route('front.index')}}">Home</a></li>
-          <li><a class="" href="{{route('front.blog')}}">Blog</a></li>
+          <li><a class="" href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a></li>
           <li class="text-white">{{$data->title}}</li>
            
         </ul>
@@ -24,10 +24,19 @@
                                 <div class="ps-post__meta mt-30">
                                    
                                    <div class="blog-li-span">
-                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+                                    @if($data->publish_check==1 && $data->publish_date)
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
+                                    @endif
                                     <span class="sp-txt">{{count($data->comments)}} Comments</span>
                                     <span class="sp-txt">{{$data->category->name}}</span>
+
+                                    @if($data->updated_check==1 && $data->updated_date)
+                                    <span class="sp-txt"><span class="tc-orange">Updated :</span>{{ Carbon\Carbon::parse($data->updated_date)->format('M d, Y') }}</span>
+                                    @endif
+
                                    </div>
+
+
                                 </div>
         		</div>
             <div class="mt-50">

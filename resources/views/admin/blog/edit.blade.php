@@ -99,6 +99,56 @@
 
                     </div> 
 
+
+                            <div class="row mb-10"> 
+
+                                <label class="col-md-3 control-label" >Allow Publish Date</label>
+                                <div class="col-md-4 d-inline-flex mt-5">
+                                     <label class="mt-checkbox">
+                                        <input type="checkbox" id="publish-check" value="1" class="form-control" {{$data->publish_check==1?'checked':''}} name="publish_check"> <span></span>
+                                                                                                
+                                    </label>
+                                                   
+                                </div>
+                            </div>
+
+                           <div class="{{$data->publish_check==1?'':'custom-publish-date'}}"  id="custom-publish-date">
+                                <div class="row"> 
+
+                                    <label class="col-md-3 control-label fw-200" >Publish Date</label>
+                                    <div class="col-md-4 d-inline-flex">
+                                        <input class="input-group form-control form-control-inline" type="date" value="{{$data->publish_date}}" name="publish_date" id="pb-date" > 
+                   
+                                    </div>
+                                </div>   
+                           </div>
+
+                            <div class="row mb-10"> 
+
+                                <label class="col-md-3 control-label" >Allow Updated Date</label>
+                                <div class="col-md-4 d-inline-flex mt-5">
+                                     <label class="mt-checkbox">
+                                        <input type="checkbox" id="updated-check" value="1" class="form-control" {{$data->updated_check==1?'checked':''}} name="updated_check"> <span></span>
+                                                                                                
+                                    </label>
+                                                   
+                                </div>
+                            </div>
+
+
+                           <div class="{{$data->updated_check==1?'':'custom-updated-date'}}" id="custom-updated-date">
+                                <div class="row"> 
+
+                                    <label class="col-md-3 control-label fw-200" >Updated Date</label>
+                                    <div class="col-md-4 d-inline-flex">
+                                        <input class="input-group form-control form-control-inline" type="date" value="{{$data->updated_date}}" name="updated_date"  > 
+                   
+                                    </div>
+                                </div>
+                           </div>
+
+
+
                     <div class="form-group">
                         <label class="col-md-3 control-label" >Small Detail</label>
                         <div class="col-md-8 d-inline-flex">
@@ -183,5 +233,34 @@
 @endsection
 @section('pagelevel_scripts')
 <script src="{{ asset('assets/admin_assets/img_upload/imgUpload.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function()
+    {
+        $("#publish-check").on( "change", function() {
+            if(this.checked){
+             $('#custom-publish-date').removeClass('custom-publish-date');
+             $('.pb-date').attr('required',true);
+            }
+            else{
+              $('#custom-publish-date').addClass('custom-publish-date');
+              $('.pb-date').attr('required',false);
+                            
+            }
 
+          });
+          $("#updated-check").on( "change", function() {
+            if(this.checked){
+             $('#custom-updated-date').removeClass('custom-updated-date');
+             $('.up-date').attr('required',true);
+             
+            }
+            else{
+              $('#custom-updated-date').addClass('custom-updated-date');
+                 $('.up-date').attr('required',false);           
+            }
+
+          });
+
+    })
+</script>
 @endsection

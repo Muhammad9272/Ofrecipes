@@ -1,4 +1,5 @@
 @extends('front.layouts.app')
+@section('title', 'Blogs — ')
 @section('page_content')
     <div class="ps-breadcrumb">
       <div class="container def-pad">
@@ -18,9 +19,9 @@
         </div>
         <div class="ps-blog__header">
             <ul class="ps-list--blog-links">
-              <li class="{{$bslg=="All"?'active':''}}"><a href="{{route('front.blog')}}">All</a></li>
+              <li class="{{$bslg=="All"?'active':''}}"><a href="{{route('front.page',$blogpgSlug->slug)}}">All</a></li>
               @foreach($b_cats as $b_cat)
-                <li class="{{$b_cat->slug==$bslg?'active':''}}"><a href="{{route('front.blog',$b_cat->slug)}}">{{$b_cat->name}}</a></li>
+                <li class="{{$b_cat->slug==$bslg?'active':''}}"><a href="{{route('front.blog.cat',['slug'=>$blogpgSlug->slug,'slug1'=>$b_cat->slug])}}">{{$b_cat->name}}</a></li>
               @endforeach
               
             </ul>
@@ -40,7 +41,9 @@
                                 <div class="ps-post__meta">
                                    
                                    <div class="blog-li-span">
-                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+                                    @if($data->publish_check==1 && $data->publish_date)
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
+                                    @endif
                                     
                                     <span class="sp-txt">{{$data->category->name}}</span>
                                    </div>

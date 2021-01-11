@@ -113,11 +113,12 @@
                               <ul class="menu menu--electronic ">
                                 <li><a class="sp-txt " href="{{route('front.index')}}">Home</a>
                                 </li>
-                                <li><a class="sp-txt " href="{{route('front.category')}}"> Recipe Types</a>
+                                @foreach($rc_cats as $rc_cat)
+                                <li> <a class="sp-txt " href="{{route('front.category',$rc_cat->slug)}}">{{$rc_cat->name}}</a>                
                                 </li>
-                                <li><a class="sp-txt " href="{{route('front.cuisine')}}"> Cuisines</a>
-                                </li>
-                                <li><a class="sp-txt " href="{{route('front.blog')}}"> Blog</a>
+                                @endforeach
+
+                                <li><a class="sp-txt " href="{{route('front.page',$blogpgSlug->slug)}}"> Blog</a>
                                 </li>
                                 <li><a class="sp-txt " href="{{route('front.contact')}}"> Contact</a>
                                 </li>
@@ -135,12 +136,16 @@
       <div class="ps-footer__copyright">
           {{-- <p>© 2018 Martfury. All Rights Reserved</p> --}}
           <p>
+            {{$gs->copyright}}
+          </p>
+      </div>
+      <div class="ps-footer__pages" style="">
+          <p>
             @foreach($pgotherss as $pgothr)
-            <a class="sp-txt "  href="{{route('front.page',$pgothr->slug)}}">{{$pgothr->title}}</a>    {{-- <a class="sp-txt " href="">Terms & Conditions</a> --}}
-            {{-- Cookie & Privacy Policy  --}}
+            <a class="ppn"  href="{{route('front.page',$pgothr->slug)}}">{{$pgothr->title}}</a>&nbsp;&nbsp;   
             @endforeach
           </p>
 
 
-        </div>
+      </div>
     </footer>

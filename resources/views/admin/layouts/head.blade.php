@@ -1,9 +1,9 @@
 
 <meta charset="utf-8" />
-<title>Admin Panel</title>
+<title class="adpage_title">Admin Panel </title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1" name="viewport" />
-<meta content="BloodPressure Calculator Admin" name="description" />
+<meta content="Admin Panel" name="description" />
 <meta content="" name="author" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -46,5 +46,4 @@
 @show
 <!-- END PAGE LEVEL STYLES -->
 
-<link rel="shortcut icon" href="{{ asset('assets/admin_assets/favicon.ico') }}" />
 

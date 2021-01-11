@@ -4,57 +4,40 @@
       <div class="container def-pad">
         <ul class="breadcrumb">
           <li><a class="" href="{{route('front.index')}}">Home</a></li>
-          <li class="text-white">{{\Route::current()->getName() == 'front.cuisine'?'Cuisines':'Recipes'}}</li>
+          <li class="text-white">{{$data->name}}</li>
            
         </ul>
       </div>
     </div>
-
+   
 
     <div class="ps-page--blog">
       <div class="container def-pad">
         <div class="ps-page__header">
-          <h1 class="text-center " >{{\Route::current()->getName() == 'front.cuisine'?'Cuisines':'Recipes'}}</h1>
+          <h1 class="text-center ">{{$data->name}}</h1>
         </div>
 
         <div class="ps-blog--sidebar">
 
-	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">                        
+	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">    
+               <div class="mb-30">{!! $data->detail_desc !!}</div>                      
 	            <div class="row blog-pg-tag">
-                @if(\Route::current()->getName() == 'front.cuisine')
-                  @foreach($datas as $data)
-                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12  pb-20 ">
-                          <div class="ps-product p-0">
-                            <div class="ps-product__thumbnail"><a href="{{route('front.cuisine.detail',$data->slug)}}"><img src="{{asset('assets/images/subcategories/'.$data->photo)}}" alt=""></a>
-                             
-                            </div>
-                            <div class="cat-pad-sec">
-                              <div class="ps-product__content"><a class="ps-product__title" href="product-default.html">{{$data->name}}</a>
-                                
-                              </div>
-
-                            </div>
-                          </div>
-                    </div>  
-                  @endforeach 
-                @else
-                  @foreach($datas as $data)
+              
+                  @foreach($datas as $datawise)
                       <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 pb-20">
                             <div class="ps-product p-0 ">
-                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',$data->slug)}}"><img src="{{asset('assets/images/subcategories/'.$data->photo)}}" alt=""></a>
+                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',['slug1'=>$datawise->category->slug,'slug2'=>$datawise->slug])}}"><img src="{{asset('assets/images/subcategories/'.$datawise->photo)}}" alt=""></a>
                                
                               </div>
                               <div class="cat-pad-sec">
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',$data->slug)}}">{{$data->name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug1'=>$datawise->category->slug,'slug2'=>$datawise->slug])}}">{{$datawise->name}}</a>
                                   
                                 </div>
 
                               </div>
                             </div>
                       </div>  
-                  @endforeach  
-
-                @endif                                                        
+                  @endforeach                                                         
 	            </div>
 	            <div class="ps-pagination">
 	              <ul class="pagination">

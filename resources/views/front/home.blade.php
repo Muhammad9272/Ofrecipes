@@ -1,4 +1,5 @@
 @extends('front.layouts.app')
+@section('title', 'Home — ')
 @section('page_content')
     <div id="homepage-8" >
 
@@ -26,7 +27,7 @@
             <h3>Featured Recipe</h3>
           </div>
           <div class="ps-section__content ft-recipe">
-            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="false" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$recipes->count()>3?'true':'false'}}" data-owl-dots="true" data-owl-item="3" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="2" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
+            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$recipes->count()>3?'true':'false'}}" data-owl-dots="true" data-owl-item="3" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="2" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
               @foreach($recipes as $data)
                           <div class="ps-product">
                             <div class="box-shadow">
@@ -86,45 +87,46 @@
         </div>
       </div>
 
+      @if($cuisine_cat->status==1)
+        <div class="ps-home-trending-products ps-section--furniture mb-70">
+          <div class="container def-pad-slide">
+            <div class="ps-section__header">
+              <h3> Cuisines</h3>
+            </div>
+            <div class="ps-section__content">
+              <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$cuisines->count()>4?'true':'false'}}" data-owl-dots="true" data-owl-item="4" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
 
-      <div class="ps-home-trending-products ps-section--furniture mb-70">
-        <div class="container def-pad-slide">
-          <div class="ps-section__header">
-            <h3> Cuisines</h3>
-          </div>
-          <div class="ps-section__content">
-            <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$cuisines->count()>4?'true':'false'}}" data-owl-dots="true" data-owl-item="4" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
-
-                <div class="row">
-                @foreach($cuisines as $cuisine)
-                          <div class="ps-product">
-                            <div class="ps-product__thumbnail"><a href="{{route('front.cuisine.detail',$cuisine->slug)}}"><img src="{{asset('assets/images/subcategories/'.$cuisine->photo)}}" alt=""></a>
-                             
-                            </div>
-                            <div class="cat-pad-sec">
-                              <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.cuisine.detail',$cuisine->slug)}}">{{$cuisine->name}}</a>
-                                
+                  <div class="row">
+                  @foreach($cuisines as $cuisine)
+                            <div class="ps-product">
+                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',['slug1'=>$cuisine->category->slug,'slug2'=>$cuisine->slug])}}"><img src="{{asset('assets/images/subcategories/'.$cuisine->photo)}}" alt=""></a>
+                               
                               </div>
+                              <div class="cat-pad-sec">
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug1'=>$cuisine->category->slug,'slug2'=>$cuisine->slug])}}">{{$cuisine->name}}</a>
+                                  
+                                </div>
 
+                              </div>
                             </div>
-                          </div>
-                        @if((count($cuisines)<8))
-                         </div><div class="row">
-                        @elseif ( ( ($loop->iteration % 2) == 0 ) && (!$loop->last) )
-                             </div><div class="row">
-                        @endif
-                 @endforeach
-                </div>
-                          
+                          @if((count($cuisines)<8))
+                           </div><div class="row">
+                          @elseif ( ( ($loop->iteration % 2) == 0 ) && (!$loop->last) )
+                               </div><div class="row">
+                          @endif
+                   @endforeach
+                  </div>
+                            
+              </div>
+            </div>
+            <div class="ps-section__header">
+                  <div class="read-btn margin-t-25">
+                   <a class="ps-btn btn-custom " href="{{route('front.category',$cuisine_cat->slug)}}">View all</a>
+                  </div>            
             </div>
           </div>
-          <div class="ps-section__header">
-                <div class="read-btn margin-t-25">
-                 <a class="ps-btn btn-custom " href="{{route('front.cuisine')}}">View all</a>
-                </div>            
-          </div>
         </div>
-      </div>
+      @endif
 
 
       <div class="ps-home-trending-products ps-section--furniture margin-t-50">
@@ -144,7 +146,9 @@
                                 <div class="ps-post__meta">
                                    
                                    <div class="blog-li-span">
-                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+                                    @if($data->publish_check==1 && $data->publish_date)
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
+                                    @endif
                                     <span class="sp-txt">{{count($data->comments)}} Comments</span>
                                     <span class="sp-txt">{{$data->category->name}}</span>
                                    </div>
@@ -225,47 +229,48 @@
         </div>
       </div>
 
+      @if($course_cat->status==1) 
+        <div class="ps-home-trending-products ps-section--furniture margin-t-25 mb-90">
+          <div class="container def-pad-slide">
+            <div class="ps-section__header">
+              <h3>Recipe Categories</h3>
+            </div>
 
-      <div class="ps-home-trending-products ps-section--furniture margin-t-25 mb-90">
-        <div class="container def-pad-slide">
-          <div class="ps-section__header">
-            <h3>Recipe Categories</h3>
-          </div>
-
-          <div class="ps-section__content">
-            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="false" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$courses->count()>4?'true':'false'}}" data-owl-dots="true" data-owl-item="4" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
-                        
-                <div class="row">
-                @foreach($courses as $course)
-                          <div class="ps-product">
-                            <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',$course->slug)}}"><img src="{{asset('assets/images/subcategories/'.$course->photo)}}" alt=""></a>
-                             
-                            </div>
-                            <div class="cat-pad-sec">
-                              <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',$course->slug)}}">{{$course->name}}</a>
-                                
-                              </div>
-
-                            </div>
-                          </div>
-                         @if((count($courses)<8))
-                         </div><div class="row">
-                         
-                         @elseif ( ( ($loop->iteration % 2) == 0 ) && (!$loop->last) )
-                             </div><div class="row">
-                        @endif
-                 @endforeach
-                </div>
+            <div class="ps-section__content">
+              <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$courses->count()>4?'true':'false'}}" data-owl-dots="true" data-owl-item="4" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
                           
+                  <div class="row">
+                  @foreach($courses as $course)
+                            <div class="ps-product">
+                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',['slug1'=>$course->category->slug,'slug2'=>$course->slug])}}"><img src="{{asset('assets/images/subcategories/'.$course->photo)}}" alt=""></a>
+                               
+                              </div>
+                              <div class="cat-pad-sec">
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug1'=>$course->category->slug,'slug2'=>$course->slug])}}">{{$course->name}}</a>
+                                  
+                                </div>
+
+                              </div>
+                            </div>
+                           @if((count($courses)<8))
+                           </div><div class="row">
+                           
+                           @elseif ( ( ($loop->iteration % 2) == 0 ) && (!$loop->last) )
+                               </div><div class="row">
+                          @endif
+                   @endforeach
+                  </div>
+                            
+              </div>
+            </div>
+            <div class="ps-section__header">
+                  <div class="read-btn margin-t-25">
+                   <a class="ps-btn btn-custom " href="{{route('front.category',$course_cat->slug)}}">View all</a>
+                  </div>            
             </div>
           </div>
-          <div class="ps-section__header">
-                <div class="read-btn margin-t-25">
-                 <a class="ps-btn btn-custom " href="{{route('front.category')}}">View all</a>
-                </div>            
-          </div>
         </div>
-      </div>
+      @endif
 
 
       @if($bottom_banner->status==1)
@@ -291,7 +296,9 @@
                                 <div class="ps-post__meta">
                                    
                                    <div class="blog-li-span">
-                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{$data->created_at->format('M d, Y')}}</span>
+                                    @if($data->publish_check==1 && $data->publish_date)
+                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
+                                    @endif
                                     <span class="sp-txt">{{count($data->comments)}} Comments</span>
                                     <span class="sp-txt">{{$data->category->name}}</span>
                                    </div>

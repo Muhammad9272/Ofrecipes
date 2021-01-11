@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App;
+use App\Models\Category;
 use App\Models\Partner;
 use App\Models\PgOther;
 use App\Models\SubCategory;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
          view()->composer('*',function($settings){
+            
             $settings->with('gs', DB::table('generalsettings')->find(1));
 
             $settings->with('sb1', DB::table('banners')->where('slug','side-banner1')->first());
@@ -43,14 +45,20 @@ class AppServiceProvider extends ServiceProvider
             $settings->with('abt', DB::table('pg_abouts')->first());
 
 
-            $settings->with('t_recipes', DB::table('recipes')->where('status',1)->orderBy('views', 'desc')->take(20)->get());
+            $settings->with('t_recipes', DB::table('recipes')->where('is_trending',1)->where('status',1)->get());
 
-            $settings->with('t_recipes', DB::table('recipes')->where('status',1)->orderBy('views', 'desc')->take(20)->get());
 
+            $settings->with('course_cat', Category::where('id',1)->first());
+            $settings->with('cuisine_cat', Category::where('id',2)->first());
+
+            $settings->with('rc_cats', Category::where('status',1)->get());
             $settings->with('rc_subs', SubCategory::where('status',1)->get());
+
+
             $settings->with('partnrs',  Partner::orderBy('id','desc')->get());
 
             $settings->with('pgotherss', PgOther::orderBy('id','desc')->where('status',1)->get());
+            $settings->with('blogpgSlug', PgOther::where('id',5)->first());
 
 
 

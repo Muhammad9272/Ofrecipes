@@ -109,6 +109,11 @@ class AdminController extends Controller
 
          $data->title=$request->title;   
          $data->to_email=$request->email;   
+         $data->author_name=$request->author_name;   
+         $data->author_link=$request->author_link;
+         $data->recipe_tag=$request->recipe_tag;
+         $data->eCookbook=$request->eCookbook;
+         $data->copyright=$request->copyright;
 
         $data->update();
         $msg = 'Successfully updated data';
