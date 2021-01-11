@@ -9,6 +9,25 @@
     height: 100%;
     overflow: visible;
 }
+#loading {
+    -webkit-animation: spin .75s ease-in-out infinite;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    display: none;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+
 .head-adv .header__top-links li > a{
     
 }

@@ -1,3 +1,4 @@
+​
                 <div class="ps-post">
                     <div class="ps-post__content ">
                         <div class="ps-post__meta recip-detail">
@@ -37,7 +38,9 @@
                                       <input name="email" type="email" class="form-control empty-me sp-txt" required="" id="" placeholder="Email">
                                     </div>
                                     <div class="form-group col-12 ">
-                                    	<button id="sub-btn" class="sp-txt">Submit</button>
+                                    	<button id="sub-btn" class="sp-txt">
+                                       <div id="loading"></div>
+                                      Submit</button>
                                     </div>
                                 </div>
            						

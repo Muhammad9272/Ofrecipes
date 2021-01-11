@@ -21,6 +21,7 @@ use App\Models\Subscriber;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Newsletter;
 use Validator;
 // use Illuminate\Routing\Route;
 
@@ -415,9 +416,20 @@ class HomeController extends Controller
 
     public function subscribe(Request $request)
     {
+       // if ( ! Newsletter::isSubscribed($request->email) ) 
+       //  {
+
+       //      Newsletter::subscribePending($request->email, ['FNAME'=>$request->name, 'LNAME'=>$request->lname]);
+       //      return response()->json('You Have Subscribed Successfully.');
+       //  }
+       //  else{
+       //      return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
+       //  }
+        // return redirect('newsletter')->with('failure', 'Sorry! You have already subscribed ');
+
         $subs = Subscriber::where('email','=',$request->email)->first();
         if(isset($subs)){
-        return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
+         return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
         }
         $subscribe = new Subscriber;
         $subscribe->fill($request->all());

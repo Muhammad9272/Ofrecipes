@@ -104,6 +104,7 @@ $(function ($) {
       e.preventDefault();
      var $this=$(this);
       $('#sub-btn').prop('disabled',true);
+      $('#loading').css("display", "inline-block");
           $.ajax({
            method:"POST",
            url:$(this).prop('action'),
@@ -126,11 +127,13 @@ $(function ($) {
               }
 
               $('#sub-btn').prop('disabled',false);
-
+              $('#loading').hide();
 
            }
 
+
           });
+
 
     });
 
