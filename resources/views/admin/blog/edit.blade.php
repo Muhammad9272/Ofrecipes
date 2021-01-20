@@ -37,6 +37,13 @@
             <div class="gocover" style="background: url({{asset('assets/images/'.$gs->admin_loader)}}) no-repeat scroll center center rgba(45, 45, 45, 0.5);"></div>
             <form id="geniusform" action="{{route('admin-article-update',$data->id)}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
             {{csrf_field()}}
+                <div class="side-btn-save">
+                   <div>
+                    <a id="rc-pr-link" href="{{route('front.blog.detail',$data->slug)}}" class="btn btn-lg green-haze btn-outline">Preview</a>
+                       <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
+                        <i class="fa fa-check"></i> Update </button>
+                   </div>
+               </div>
                @include('includes.admin.form-both')
             
                 <div class="form-body">
@@ -98,6 +105,14 @@
                         </div> --}}
 
                     </div> 
+                            <div class="row"> 
+
+                                <label class="col-md-3 control-label" >Post Schedule</label>
+                                <div class="col-md-4 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" value="{{ Carbon\Carbon::parse($data->post_schedule)->format('Y-m-d\TH:i:s') }}" > 
+               
+                                </div>
+                            </div>
 
 
                             <div class="row mb-10"> 
@@ -216,7 +231,7 @@
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-4">
-                            <button type="submit" class="btn green addProductSubmit-btn">Save</button>
+                            <button type="submit" class="btn green addProductSubmit-btn">update</button>
                             <button type="button" class="btn default">Cancel</button>
                         </div>
                     </div>

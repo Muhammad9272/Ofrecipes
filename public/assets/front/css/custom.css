@@ -9,6 +9,9 @@
     height: 100%;
     overflow: visible;
 }
+.ebook-h h1,.ebook-h h2,.ebook-h h3,.ebook-h h4,.ebook-h h5 font{
+   font-family: "Poppins" !important;}
+
 #loading {
     -webkit-animation: spin .75s ease-in-out infinite;
     display: inline-block;

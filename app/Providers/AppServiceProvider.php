@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
          view()->composer('*',function($settings){
+            $time=$this->get_local_time();
             
             $settings->with('gs', DB::table('generalsettings')->find(1));
 
@@ -45,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
             $settings->with('abt', DB::table('pg_abouts')->first());
 
 
-            $settings->with('t_recipes', DB::table('recipes')->where('is_trending',1)->where('status',1)->get());
+            $settings->with('t_recipes', DB::table('recipes')->where('post_schedule','<=',$time)->where('is_trending',1)->where('status',1)->get());
 
 
             $settings->with('course_cat', Category::where('id',1)->first());
@@ -64,4 +65,23 @@ class AppServiceProvider extends ServiceProvider
 
         });
     }
+
+
+     function get_local_time(){
+
+       $ip = file_get_contents("http://ipecho.net/plain");
+
+       $url = 'http://ip-api.com/json/'.$ip;
+
+       $tz = file_get_contents($url);
+
+       $tz = json_decode($tz,true)['timezone'];
+
+       $time=Carbon::now($tz);
+       $time=$time->format('Y-m-d H:i:s');
+
+       return $time;
+
+    } 
+
 }

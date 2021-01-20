@@ -45,7 +45,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item start {{ (request()->is('admin/recipe/review*')) || (request()->is('admin//recipe/review/edit/*')) || (request()->is('admin/blog/category/edit*')) ? 'active' : '' }} ">
+                    <li class="nav-item start {{ (request()->is('admin/recipe/review*')) || (request()->is('admin/recipe/review/edit/*')) ? 'active' : '' }} ">
 
                         <a href="{{route('admin-recipe-review-index')}}" class="nav-link ">
                            
@@ -53,6 +53,16 @@
                          
                         </a>
                     </li>
+
+                    <li class="nav-item start {{ (request()->is('admin/recipe/reply*')) ? 'active' : '' }} ">
+
+                        <a href="{{route('admin-recipe-reply-index')}}" class="nav-link ">
+                           
+                            <span class="title">Replies</span>
+                         
+                        </a>
+                    </li>
+
                 </ul>
             </li>
 
@@ -136,6 +146,7 @@
                             <span class="title">Blogs</span>                    
                         </a>
                     </li>
+                    
 
                     <li class="nav-item start {{ (request()->is('admin/blog/category*')) || (request()->is('admin/blog/category/create*')) || (request()->is('admin/blog/category/edit*')) ? 'active' : '' }} ">
 
@@ -145,6 +156,15 @@
                          
                         </a>
                     </li>
+                    <li class="nav-item start {{  (request()->is('admin/blog/comment*')) ? 'active' : '' }}">
+
+                        <a href="{{route('admin-article-indexComment')}}" >
+                        
+                            <span class="title">Blog Comments</span>                    
+                        </a>
+                     </li>
+
+
                 </ul>
             </li>
 

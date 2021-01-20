@@ -19,6 +19,7 @@ use App\Models\Slider;
 use App\Models\SubCategory;
 use App\Models\Subscriber;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Newsletter;
@@ -27,23 +28,34 @@ use Validator;
 
 
 class HomeController extends Controller
-{
+{  
+    
+
     public function index()
     {
+        
+        $time=$this->get_local_time();
         $top_banner = Banner::where('slug','top-banner')->first();
         $bottom_banner = Banner::where('slug','bottom-banner')->first();
         $sliders=Slider::where('status',1)->get();
-        $blog_latest=Article::where('status',1)->orderBy('id', 'desc')->take(4)->get();
-        $blog_popular=Article::where('status',1)->orderBy('views', 'desc')->take(4)->get();
+
+        $blog_latest=Article::where('status',1)->where('post_schedule','<=',$time)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date')->take(4)->get();
+
+        
+
+
         $courses=SubCategory::where('category_id',1)->where('status',1)->get();
         $cuisines=SubCategory::where('category_id',2)->where('status',1)->get();
 
         $partners=Partner::all();
         $about = PgAbout::findOrFail(1);
 
-        $recipes=Recipe::where('is_featured',1)->where('status',1)->orderBy('id', 'desc')->get();
+        $recipes=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date', 'asc')->get();
+
+        $recipe_latest=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date')->get();
+
          $page_no=1;
-    	return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','blog_popular','courses','cuisines','partners','about','recipes','page_no'));
+    	return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','recipe_latest','courses','cuisines','partners','about','recipes','page_no'));
     }
 
 
@@ -67,8 +79,9 @@ class HomeController extends Controller
 
     public function categorydetail($slug1='',$slug2='')
     {   
+        $time=$this->get_local_time();
         if(\Route::current()->getName() == 'front.recipe.all'){
-            $datas=Recipe::where('status',1)->paginate(10);
+            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->paginate(10);
             $data='';
             $ad_check=1;
             return view('front.category-detail',compact('datas','data','ad_check'));
@@ -80,7 +93,7 @@ class HomeController extends Controller
         $datas='';        
         if ($sub) {                          
             $ids=[];
-               $recipes=Recipe::where('recipes_id','!=',null)->where('recipes_id','!=','')->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
+               $recipes=Recipe::where('post_schedule','<=',$time)->where('recipes_id','!=',null)->where('recipes_id','!=','')->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
                 if($main_cat->id==2){ 
                     foreach ($recipes as $datawise) {
                         $r_id=json_decode($datawise->cuisines_id);
@@ -101,7 +114,7 @@ class HomeController extends Controller
                         } 
                 }
       
-            $datas=Recipe::where('status',1)->whereIn('id',$ids)->paginate(10);
+            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->whereIn('id',$ids)->paginate(10);
           
           }
           
@@ -117,9 +130,10 @@ class HomeController extends Controller
 
     public function RecipeSearch(Request $request)
     {
+      $time=$this->get_local_time();
 
        $search=$request->search;
-       $datas=Recipe::where('name', 'like', '%' . $search . '%')->where('status',1)->paginate(10);
+       $datas=Recipe::where('post_schedule','<=',$time)->where('name', 'like', '%' . $search . '%')->where('status',1)->paginate(10);
             $data='';
        if($datas){
         $ad_check=1;
@@ -130,13 +144,13 @@ class HomeController extends Controller
 
 
     public function recipedetail($slug)
-    {
-       
+    { 
+        $time=$this->get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Recipe::where('slug','=',$slug)->first(); 
         }
         else{
-           $data=Recipe::where('slug','=',$slug)->where('status',1)->first(); 
+           $data=Recipe::where('post_schedule','<=',$time)->where('slug','=',$slug)->where('status',1)->first(); 
         }
 
     	
@@ -154,12 +168,12 @@ class HomeController extends Controller
 
     public function printpage($slug)
     {
-       
+        $time=$this->get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Recipe::where('slug','=',$slug)->first(); 
         }
         else{
-           $data=Recipe::where('slug','=',$slug)->where('status',1)->first(); 
+           $data=Recipe::where('post_schedule','<=',$time)->where('slug','=',$slug)->where('status',1)->first(); 
         }
 
         if($data){
@@ -174,15 +188,15 @@ class HomeController extends Controller
     public function page($slug,$slug2='')
     {   
         $data=PgOther::where('slug',$slug)->first();
-     
+        $time=$this->get_local_time();
         if(isset($data) && $data->id==5){
             if($slug2){
                 $bcat=BlogCategory::where('slug',$slug2)->where('status',1)->first();
-                $datas=Article::where('category_id',$bcat->id)->where('status',1)->paginate(16);
+                $datas=Article::where('post_schedule','<=',$time)->where('category_id',$bcat->id)->where('status',1)->orderBy('publish_date')->paginate(16);
                 $bslg=$bcat->slug;                
             }
             else{
-                $datas=Article::where('status',1)->paginate(16);
+                $datas=Article::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->paginate(16);
                 $bslg='All';
             } 
             $page_no=5;           
@@ -205,12 +219,12 @@ class HomeController extends Controller
 
     public function blogdetail($slug)
     {  
-
+        $time=$this->get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Article::where('slug',$slug)->first(); 
         }
         else{
-           $data=Article::where('slug',$slug)->where('status',1)->first();
+           $data=Article::where('post_schedule','<=',$time)->where('slug',$slug)->where('status',1)->first();
         }
 
         if($data){
@@ -337,6 +351,7 @@ class HomeController extends Controller
             $data[2] = $comment->created_at->diffForHumans();
             $data[3] = $comment->comment;
             $data[4] = $comments;
+            $data[5] ="Comment created Successfully!";
             
             return response()->json($data);
         }
@@ -379,7 +394,7 @@ class HomeController extends Controller
                             </div>
                         <p class="sp-txt">'.$data->review.'</p><a  data-toggle="modal" data-target="#exampleModal" class="ps-block__reply sp-txt reply-btn"  data-href="'.route('recipe.reply',$data->id).'">Reply</a>
                                 <div class="chain-reply">';
-                    foreach($data->replies as $reply){
+                    foreach($data->replies->where('status',1) as $reply){
                         $image = url('assets/front/img/recip/'.$items[array_rand($items)]);
                         $output.='<hr><div class="ps-block--comment"><div class="ps-block__thumbnail"><img src="'.$image.'" alt=""></div><div class="ps-block__content"><h5>'. $reply->name .'<small class="sp-txt">'. $reply->created_at->format('M d, Y ') .'</small></h5><p class="sp-txt">'.$reply->text.'</p><a  data-toggle="modal" data-target="#exampleModal" class="ps-block__reply sp-txt reply-btn"  data-href="'.route('recipe.reply',$data->id).'">Reply</a></div>
                                     </div>';
@@ -407,7 +422,7 @@ class HomeController extends Controller
             $data[1] = $reply->name;
             $data[2] = $reply->created_at->diffForHumans();
             $data[3] = $reply->text;
-            // $data[4] = route('product.reply.delete',$reply->id);
+            $data[4] = "Reply Created Successfully!";
             // $data[5] = route('product.reply.edit',$reply->id);;
             return response()->json($data);
         }
@@ -416,6 +431,31 @@ class HomeController extends Controller
 
     public function subscribe(Request $request)
     {
+        // $data=Newsletter::getMember();
+        // dd($data);
+        $fname=$request->name;
+        $lname=$request->lname;
+
+        if (! Newsletter::isSubscribed($request->email) ) 
+        {
+            Newsletter::subscribeOrUpdate($request->email,['FNAME'=>$fname, 'LNAME'=>$lname]);
+
+            $subs = Subscriber::where('email','=',$request->email)->first();
+            if(!isset($subs)){        
+            $subscribe = new Subscriber;
+            $subscribe->fill($request->all());
+            $subscribe->save();
+            }
+            // $api = Newsletter::getApi();
+            // $data=Newsletter::getLastError();
+            // dd($api);
+            return response()->json('You Have Subscribed Successfully.');
+        }
+        else{
+            return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
+        }
+
+
        // if ( ! Newsletter::isSubscribed($request->email) ) 
        //  {
 
@@ -427,19 +467,37 @@ class HomeController extends Controller
        //  }
         // return redirect('newsletter')->with('failure', 'Sorry! You have already subscribed ');
 
-        $subs = Subscriber::where('email','=',$request->email)->first();
-        if(isset($subs)){
-         return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
-        }
-        $subscribe = new Subscriber;
-        $subscribe->fill($request->all());
-        $subscribe->save();
-        return response()->json('You Have Subscribed Successfully.');
+        // $subs = Subscriber::where('email','=',$request->email)->first();
+        // if(isset($subs)){
+        //  return response()->json(array('errors' => [ 0 =>  'This Email Has Already Been Taken.']));
+        // }
+        // $subscribe = new Subscriber;
+        // $subscribe->fill($request->all());
+        // $subscribe->save();
+        // return response()->json('You Have Subscribed Successfully.');
     }
     public function loadCaptcha($value='')
     {
         return response()->json(['captcha'=> captcha_img()]);
     }
-    
+
+    function get_local_time(){
+
+       $ip = file_get_contents("http://ipecho.net/plain");
+
+       $url = 'http://ip-api.com/json/'.$ip;
+
+       $tz = file_get_contents($url);
+
+       $tz = json_decode($tz,true)['timezone'];
+
+       $time=Carbon::now($tz);
+       $time=$time->format('Y-m-d H:i:s');
+
+       return $time;
+
+    } 
+
+
 
 }

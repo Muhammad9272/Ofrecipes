@@ -169,11 +169,12 @@ $(document).on('submit','#comment-form',function(e){
             }
           }
           else{
-            $("#comment_count").html(data[4]);
+            // $("#comment_count").html(data[4]);
             $('#comment-form textarea').val('');
             $('#comment-form .email-rpeat').val('');
-            var txt='<div class="ps-block--comment"><div class="ps-block__thumbnail"><img src="'+data[0]+'" alt=""></div><div class="ps-block__content"><h5>'+ data[1] +'<small class="sp-txt">'+ data[2] +'</small></h5><p class="sp-txt">'+ data[3] +'</p></div></div>';
-            $('.all-comment').append(txt);
+            // var txt='<div class="ps-block--comment"><div class="ps-block__thumbnail"><img src="'+data[0]+'" alt=""></div><div class="ps-block__content"><h5>'+ data[1] +'<small class="sp-txt">'+ data[2] +'</small></h5><p class="sp-txt">'+ data[3] +'</p></div></div>';
+            // $('.all-comment').append(txt);
+            flashysuccess(data[5]);
           }
 
 
@@ -253,9 +254,10 @@ $(document).on('submit','#rc-reply-form',function(e){
         console.log(data);
           // $('#comment-form textarea').val('');
           $('button.submit-btn').prop('disabled',false);
-          var txt='<hr><div class="ps-block--comment"><div class="ps-block__thumbnail"><img src="'+data[0]+'" alt=""></div><div class="ps-block__content"><h5>'+ data[1] +'<small class="sp-txt">'+ data[2] +'</small></h5><p class="sp-txt">'+ data[3] +'</p></div></div>';
-          $('a[data-href="'+url1+'"]').first().siblings(".chain-reply").append(txt);
+          // var txt='<hr><div class="ps-block--comment"><div class="ps-block__thumbnail"><img src="'+data[0]+'" alt=""></div><div class="ps-block__content"><h5>'+ data[1] +'<small class="sp-txt">'+ data[2] +'</small></h5><p class="sp-txt">'+ data[3] +'</p></div></div>';
+          // $('a[data-href="'+url1+'"]').first().siblings(".chain-reply").append(txt);
           $('#exampleModal').modal('hide');
+          flashysuccess(data[4]);
 
           // text.val('');
           btn.prop('disabled',false);

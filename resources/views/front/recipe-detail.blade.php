@@ -15,7 +15,7 @@
 
     <div id="homepage-8" >
 
-	    <div class="ps-home-trending-products ps-section--furniture mt-80">
+	    <div class="ps-home-trending-products ps-section--furniture mt-100">
 	        <div class="container def-pad">
 	            <div class="ps-section__header" style="text-align: left;">
 	              <h3 class="mb-30">{{$data->name}}</h3>
@@ -52,7 +52,7 @@
 		            </div>
 
 		            <div class="row">
-		                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 ">
+		                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-20">
 		                            <div class="ps-post">
 			                            <div class="ps-post__content">
 			                                <div class="ps-post__meta">
@@ -442,9 +442,9 @@
 		            	@csrf
 			            <div class="row">
 			                          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">
-			                            <div class="ps-form__left">
-			                              <h3>Subscribe to our newsletter</h3>
-			                              <p class="sp-txt">to receive the latest news, Item and offers direct to<br> your inbox.</p>
+			                            <div class="ps-form__left e-book-h">
+			                              {{-- <h3>Subscribe to our newsletter</h3> --}}
+			                              <p class="sp-txt">{!! $gs->newsletter !!}</p>
 			                            </div>
 			                          </div>
 			                          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">			                          		

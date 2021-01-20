@@ -37,6 +37,13 @@
             <div class="gocover" style="background: url({{asset('assets/images/'.$gs->admin_loader)}}) no-repeat scroll center center rgba(45, 45, 45, 0.5);"></div>
             <form id="geniusform" action="{{route('admin-subcat-update',$data->id)}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
             {{csrf_field()}}
+                <div class="side-btn-save">
+                   <div>
+                    <a id="rc-pr-link" href="{{route('front.category.detail',['slug1'=>$data->category->slug,'slug2'=>$data->slug])}}" class="btn btn-lg green-haze btn-outline">Preview</a>
+                       <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
+                        <i class="fa fa-check"></i> Update </button>
+                   </div>
+               </div>
                @include('includes.admin.form-both')
             
                 <div class="form-body">
@@ -140,7 +147,7 @@
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-4">
-                            <button type="submit" class="btn green addProductSubmit-btn">Save</button>
+                            <button type="submit" class="btn green addProductSubmit-btn">Update</button>
                             <button type="button" class="btn default">Cancel</button>
                         </div>
                     </div>

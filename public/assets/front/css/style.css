@@ -897,16 +897,17 @@ textarea {
     font-family: Poppins;
     src: url('../fonts/Poppins/Poppins-Regular.ttf');
 }
+@font-face {
+  font-family: "times new roman";
+  src: url(../fonts/times/times.ttf);
+}
 
 * {
   font-family: "Poppins", sans-serif;
 
 }
 
-/** {
-  font-family: "Work Sans", sans-serif;
-  font-weight: 400;
-}*/
+
 .ps-product__title, .ps-post__title, .ps-post__title_read, li a {
   font-family: "Playfair_Display", sans-serif;
 }

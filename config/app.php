@@ -192,7 +192,7 @@ return [
     */
 
     'aliases' => [
-
+        
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -229,6 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        
         // 'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         // 'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
 

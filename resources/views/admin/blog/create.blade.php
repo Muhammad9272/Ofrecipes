@@ -32,6 +32,12 @@
             <div class="gocover" style="background: url({{asset('assets/images/'.$gs->admin_loader)}}) no-repeat scroll center center rgba(45, 45, 45, 0.5);"></div>
             <form id="geniusform" action="{{route('admin-article-store')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
             {{csrf_field()}}
+                <div class="side-btn-save">
+                   <div>                            
+                       <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
+                        <i class="fa fa-check"></i> Save </button>
+                   </div>
+               </div>
                @include('includes.admin.form-both')
 
 
@@ -101,6 +107,14 @@
                         </div> --}}
 
                     </div> 
+                             <div class="row"> 
+
+                                <label class="col-md-3 control-label" >Post Schedule</label>
+                                <div class="col-md-4 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" > 
+               
+                                </div>
+                            </div>
 
                             <div class="row mb-10"> 
 
@@ -251,6 +265,7 @@
 <script>
     $(document).ready(function()
     {
+        $("#post-schedule").setNow();
         $("#publish-check").on( "change", function() {
             if(this.checked){
              $('#custom-publish-date').removeClass('custom-publish-date');

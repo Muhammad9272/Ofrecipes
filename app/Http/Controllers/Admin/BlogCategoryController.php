@@ -121,6 +121,12 @@ class BlogCategoryController extends Controller
         if($data->blogs->count() > 0)
         {
             foreach ($data->blogs as $element) {
+                if($element->comments->count() > 0)
+                {
+                    foreach ($element->comments  as $gal) {
+                        $gal->delete();
+                    }
+                }
                 $element->delete();
             }
         }

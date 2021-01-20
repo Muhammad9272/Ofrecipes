@@ -21,6 +21,7 @@
         </div>
       </div>
 
+      @if($recipes->count()>0)
       <div class="ps-home-trending-products ps-section--furniture mb-70" >
         <div class="container def-pad-slide" >
           <div class="ps-section__header">
@@ -86,6 +87,7 @@
                                   
         </div>
       </div>
+      @endif
 
       @if($cuisine_cat->status==1)
         <div class="ps-home-trending-products ps-section--furniture mb-70">
@@ -129,42 +131,72 @@
       @endif
 
 
-      <div class="ps-home-trending-products ps-section--furniture margin-t-50">
-        <div class="container def-pad">
-          <div class="ps-section__header" style="text-align: left;">
-            <h3 class="mb-30">Latest Post</h3>
+      <div class="ps-home-trending-products ps-section--furniture mb-70" >
+        <div class="container def-pad-slide" >
+          <div class="ps-section__header">
+            <h3>Latest Recipes</h3>
           </div>
-          <div class="ps-blog__content">
-            <div class="row">
-                          @foreach($blog_latest as $data)
-                          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-                            <div class="ps-post">
-                              <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{route('front.blog.detail',$data->slug)}}"></a><img src="{{asset('assets/images/articles/'.$data->photo)}}" alt="">
+          <div class="ps-section__content ft-recipe">
+            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$recipes->count()>3?'true':'false'}}" data-owl-dots="true" data-owl-item="3" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="2" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
+              @foreach($recipe_latest as $data)
+                          <div class="ps-product">
+                            <div class="box-shadow">
+                              <div class="ps-product__thumbnail"><a href="{{route('front.recipe',$data->slug)}}"><img src="{{$data->photo?asset('assets/images/recipe/'.$data->photo):asset('assets/images/noimage.png')}}" alt=""></a>
                                 
                               </div>
-                              <div class="ps-post__content">
-                                <div class="ps-post__meta">
+                              <div class="ps-product__container">
+                                <div class="ps-product__content">
+                                  <div class="mid-content" >
+                                    <a class="ps-product__title" href="{{route('front.recipe',$data->slug)}}">{{ Illuminate\Support\Str::limit($data->name, 25) }}</a>
                                    
-                                   <div class="blog-li-span">
-                                    @if($data->publish_check==1 && $data->publish_date)
-                                    <span class="sp-txt"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{ Carbon\Carbon::parse($data->publish_date)->format('M d, Y') }}</span>
-                                    @endif
-                                    <span class="sp-txt">{{count($data->comments)}} Comments</span>
-                                    <span class="sp-txt">{{$data->category->name}}</span>
-                                   </div>
+                                    <p class="ps-product__price sp-txt">{{ Illuminate\Support\Str::limit($data->summary, 90) }}</p>  
+                                  </div> 
+
+                                   <div class="row">
+                                      <div class="col-6" >
+                                        <p class="ps-product__bottom-t sp-txt" style="width: max-content">
+                                          <span ><img class="d-inline-flex" src="{{asset('assets/front/img/recip/comnt.svg')}}">&nbsp;</span>
+                                          <span class="ppn">{{count($data->reviews)}} Comments</span>
+                                        </p>
+                                      </div>
+                                      <div class="col-6">
+                                         <div class="ps-product__bottom-t" >
+                                          <ul>
+                                            @if($data->recipes_id && $data->recipes_id!='[]' )
+                                              @php
+                                                 $arr=json_decode($data->recipes_id);
+                                                 $course=App\Models\SubCategory::find($arr[0]);
+                                              @endphp
+                                              @if($course)
+                                              <li class="list-bolt-col  sp-txt">{{$course->name}} </li> 
+                                              @endif
+
+                                            @endif
+                                             
+                                          </ul>
+                                           
+                                         </div>
+                                      </div>                                                                     
+                                   </div>                                                                 
                                 </div>
-                                <a class="ps-post__title" href="{{route('front.blog.detail',$data->slug)}}">{{$data->title}}</a>
-                                <p class="sp-txt">{{ Illuminate\Support\Str::limit($data->small_desc, 130) }}</p>
-                                <a href="{{route('front.blog.detail',$data->slug)}}" class="ps-post__title_read">Read more</a>
+                               
                               </div>
                             </div>
-                          </div> 
-                          @endforeach                         
+                          </div>
+              @endforeach
+                                            
 
             </div>
           </div>
+          <div class="ps-section__header">
+                <div class="read-btn margin-t-25">
+                 <a class="ps-btn btn-custom " href="{{route('front.recipe.all')}}">View all</a>
+                </div>            
+          </div>
+                                  
         </div>
       </div>
+
 
       <div class="ps-about-awards mt-40">
         <div class="container def-pad">
@@ -198,9 +230,8 @@
             @csrf
             <div class="row">
                           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">
-                            <div class="ps-form__left">
-                              <h3>Subscribe to our newsletter</h3>
-                              <p class="sp-txt">to receive the latest news, Item and offers direct to<br> your inbox.</p>
+                            <div class="e-book-h">
+                              <p class="">{!! $gs->newsletter !!}</p>
                             </div>
                           </div>
                           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">
@@ -279,14 +310,14 @@
       </div>
       @endif
 
-      <div class="ps-home-trending-products ps-section--furniture mt-80">
+      <div class="ps-home-trending-products ps-section--furniture margin-t-50">
         <div class="container def-pad">
           <div class="ps-section__header" style="text-align: left;">
-            <h3 class="mb-30">Popular Post</h3>
+            <h3 class="mb-30">Latest Post</h3>
           </div>
           <div class="ps-blog__content">
             <div class="row">
-                          @foreach($blog_popular as $data)
+                          @foreach($blog_latest as $data)
                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
                             <div class="ps-post">
                               <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{route('front.blog.detail',$data->slug)}}"></a><img src="{{asset('assets/images/articles/'.$data->photo)}}" alt="">
@@ -309,19 +340,12 @@
                               </div>
                             </div>
                           </div> 
-                          @endforeach  
+                          @endforeach                         
 
             </div>
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
 
     </div>
 @endsection    

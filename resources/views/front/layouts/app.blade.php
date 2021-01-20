@@ -88,6 +88,20 @@
       
 
     </script>
+    <script type="text/javascript">
+       $( document ).ready(function() {
+
+        $(".e-book-h font").each(function() {
+          var gt=$(this).attr("face");
+          $(this).css("font-family",gt);
+          $(this).find('*').css("font-family",gt);
+
+        });
+
+            
+      });
+
+    </script>
     <!-- custom scripts-->
    @section('pagelevel_scripts')
    @show

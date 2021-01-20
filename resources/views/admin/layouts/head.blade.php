@@ -40,7 +40,7 @@
 
 <link href="{{ asset('assets/admin_assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('assets/admin_assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css" />
-
+<link href="{{ asset("assets/admin_assets/apps/font.css") }}" rel="stylesheet" type="text/css" />
 <!-- BEGIN PAGE LEVEL STYLES -->
 @section("pagelevel_styles")
 @show

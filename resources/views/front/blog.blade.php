@@ -28,7 +28,7 @@
           </div>
         <div class="ps-blog--sidebar">
 
-	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">                        
+	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">                        
 	            <div class="row blog-pg-tag">
                     @if(count($datas)>0)
                        @foreach($datas as $data)

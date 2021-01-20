@@ -99,12 +99,23 @@
                     <div class="form-group last">
                         <label class="control-label col-md-3"> eCookbook Text</label>
                         <div class="col-md-8">
-                            <textarea style="height: 70px;" type="text" class="form-control"  name="eCookbook" required="" >
-                                {{$gs->eCookbook}}
+                            <textarea class="nic-edit" type="text" class="form-control"  name="eCookbook" required="" >
+                                {!! $gs->eCookbook !!}
                             </textarea>
                                                              
                         </div>
                     </div>
+
+                    <div class="form-group last">
+                        <label class="control-label col-md-3"> Newsletter Text</label>
+                        <div class="col-md-8">
+                            <textarea class="nic-edit" type="text" class="form-control"  name="newsletter" required="" >
+                                {!! $gs->newsletter !!}
+                            </textarea>
+                                                             
+                        </div>
+                    </div>
+
 
                     <div class="form-group last">
                         <label class="control-label col-md-3"> Recipe Card Footer Area (Tag it)</label>

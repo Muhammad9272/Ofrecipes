@@ -17,7 +17,7 @@
       <div class="container def-pad">
 
         <div class="row mt-50">
-        	<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">
+        	<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
         		<div>
         			<h1>{{$data->title}}</h1>
         			                              {{-- <div class="ps-post__content"> --}}
@@ -46,10 +46,10 @@
 
                 <div class="ps-post-comments">
                     
-                    <h3 class="text-left"> <span class="ppn" id="comment_count">{{count($data->comments)}}</span>  Comments</h3>
+                    <h3 class="text-left"> <span class="ppn" id="comment_count">{{count($data->comments->where('status',1))}}</span>  Comments</h3>
                     <div class="all-comment">
-                    @if(count($data->comments)>0)
-                      @foreach($data->comments()->take(8)->get() as $key=>$user)
+                    @if(count($data->comments->where('status',1) )>0)
+                      @foreach($data->comments()->where('status',1)->take(8)->get() as $key=>$user)
                       
                       <div class="ps-block--comment comment-box">
                         <div class="ps-block__thumbnail"><img src="{{asset('assets/front/img/recip/user'.$key.'.png')}}" alt=""></div>
@@ -63,7 +63,7 @@
                     @endif
                     </div>
 
-                    @if(count($data->comments)>0 && count($data->comments)>8)
+                    @if(count($data->comments->where('status',1) )>0 && count($data->comments->where('status',1) )>8)
                     <p class="text-center mt-4 mb-5"><button class="load-more btn btn-dark" data-totalResult="{{ count($data->comments) }}">Load More</button></p>
                     @endif
 

@@ -36,7 +36,7 @@
 
         <div class="ps-blog--sidebar">
 
-	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">
+	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
             @if(isset($data->detail_desc))     
             <div class="mb-30">{!! $data->detail_desc !!}</div>
             @endif                    

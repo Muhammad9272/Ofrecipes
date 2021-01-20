@@ -23,6 +23,10 @@ class SubCategoryController extends Controller
          $datas = SubCategory::orderBy('id','desc')->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
+                            ->editColumn('name', function(SubCategory $data) {
+                                return 
+                                '<a class="text-black" href="'. route('admin-subcat-edit',$data->id) .'">'.$data->name.'</a>';
+                            })
                             ->addColumn('select', function(SubCategory $data) {
                                 return 
                                 '<label class="mt-checkbox mt-checkbox-outline">
@@ -46,7 +50,7 @@ class SubCategoryController extends Controller
                                 <a data-href="'.route('admin-subcat-delete',$data->id).'" class="btn btn-outline delete-data  btn-sm red" data-toggle="confirmation" data-placement="top" data-popout="true" data-id="'.$data->id.'" >
                                     <i class="fa fa-trash"></i> Delete </a></div>';
                             })
-                            ->rawColumns(['select','status','action'])
+                            ->rawColumns(['name','select','status','action'])
                             ->toJson(); //--- Returning Json Data To Client Side
     }
 
@@ -164,7 +168,10 @@ class SubCategoryController extends Controller
 
         //--- Redirect Section
         $msg = 'Data Updated Successfully.';
-        return response()->json($msg);
+        $data[0]=1;
+        $data[1]=$msg;
+        $data[2]=route('front.category.detail',['slug1'=>$data->category->slug,'slug2'=>$data->slug]);
+        return response()->json($data);      
         //--- Redirect Section Ends
     }
 

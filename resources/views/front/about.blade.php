@@ -21,7 +21,7 @@
       <div class="container def-pad">
 
         <div class="row mt-50">
-          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-80">
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
 
         		{!! $data->desc !!}
 

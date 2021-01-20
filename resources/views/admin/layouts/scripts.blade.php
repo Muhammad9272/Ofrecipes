@@ -69,7 +69,7 @@
 <script src="{{ asset('assets/admin_assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}" type="text/javascript"></script>
 <script src="{{ asset('assets/admin_assets/pages/scripts/components-date-time-pickers.min.js')}}" type="text/javascript"></script>
 
-  <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> 
+  <script type="text/javascript" src="{{ asset('assets/admin_assets/nicEdit.js')}}"></script> 
   
 
 

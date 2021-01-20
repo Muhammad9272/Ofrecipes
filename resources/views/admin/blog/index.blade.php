@@ -21,7 +21,7 @@
                                               <form id="blogSlugUpdate" action="{{route('admin-article-slug-update')}}" method="post">
                                               @csrf                         
                                                 <div class="blog-slug-2 d-inline-flex">
-                                                       <p style="margin:7px 0">Offrecipes.com/</p>
+                                                       <p style="margin:7px 0">{{route('front.index')}}/</p>
                                                         <input style="width: auto;" id="blog-slug-in" name="slug" type="text" class="form-control" value="{{$blogpgSlug->slug}}" placeholder="Enter Slug" disabled="">
                                                         <input type="hidden" id="blog-slug-hid" value="{{$blogpgSlug->slug}}">
 
@@ -76,7 +76,7 @@
                                   <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Publish Date</label>
-                                       <input type="text" placeholder="Date" class="form-control filter-input" data-id="column-3" >
+                                       <input type="date" placeholder="Date" class="form-control filter-select" data-id="column-3" >
                                     </div>                                     
                                   </div>
                                 </div>
@@ -130,7 +130,7 @@
                       <div class="mt-radio-list">
 
                           <label class="mt-radio mt-radio-outline">
-                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios24" data-id="ch-cat" value="1" > Change Category
+                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios23" data-id="ch-cat" value="1" > Change Category
                               <span></span>
                           </label>
                           <label class="mt-radio mt-radio-outline">
@@ -146,9 +146,14 @@
                               <input data-id="upl-date" type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios25" value="4" > Change Updated date
                               <span></span>
                           </label>
+                          <label class="mt-radio mt-radio-outline">
+                              <input data-id="ps-sc-date" type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios27" value="5" > Change Post Scheduled Date
+                              <span></span>
+                          </label>
+
 
                           <label class="mt-radio mt-radio-outline">
-                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios27" value="5" > Delete Blogs
+                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios28" value="6" > Delete Blogs
                               <span></span>
                           </label> 
 
@@ -199,6 +204,16 @@
            
                             </div>
                           </div>
+                      </div>
+                      <div class="row mdr-hide" id="ps-sc-date">
+                        <div class="row" style="margin-left: 15px;"> 
+
+                                <label class="col-md-3 control-label"  >Post Schedule</label>
+                                <div class="col-md-6 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" > 
+               
+                                </div>
+                            </div>    
                       </div>
 
 
@@ -338,7 +353,7 @@
 <script type="text/javascript">
    
   $(document).ready(function () {
-
+    $("#post-schedule").setNow();
     $('.filter-input').keyup( function() {
       table.column('#'+$(this).attr('data-id')).search( $(this).val() ).draw();
     } );

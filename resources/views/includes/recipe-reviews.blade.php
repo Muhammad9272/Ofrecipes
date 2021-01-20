@@ -1,7 +1,7 @@
-                    <h3 class="text-left"> <span class="ppn" id="comment_count">{{count($data->reviews)}}</span>  Comments</h3>
+                    <h3 class="text-left"> <span class="ppn" id="comment_count">{{count($data->reviews->where('status',1))}}</span>  Reviews</h3>
                     <div class="all-comment">
-                      @if(count($data->reviews)>0)
-                        @foreach($data->reviews()->take(8)->get() as $key=>$user)
+                      @if(count($data->reviews->where('status',1))>0)
+                        @foreach($data->reviews()->where('status',1)->take(8)->get() as $key=>$user)
                         
                         <div class="ps-block--comment comment-box">
                           <div class="ps-block__thumbnail"><img src="{{asset('assets/front/img/recip/user'.$key.'.png')}}" alt=""></div>
@@ -19,7 +19,7 @@
                                 class="ps-block__reply sp-txt reply-btn"  data-href="{{ route('recipe.reply',$user->id) }}">Reply</a>
 
                                 <div class="chain-reply">
-                                  @foreach($user->replies as $key=>$reply)
+                                  @foreach($user->replies()->where('status',1) as $key=>$reply)
                                     <hr>
             	                      <div class="ps-block--comment">
             						              <div class="ps-block__thumbnail"><img src="{{$key%2==0?asset('assets/front/img/recip/user1.png'):asset('assets/front/img/recip/user2.png')}}" alt=""></div>
@@ -41,6 +41,6 @@
                       @endif
                     </div>
 
-                    @if(count($data->reviews)>8)
+                    @if(count($data->reviews->where('status',1))>8)
                     <p class="text-center mt-4 mb-5"><button class="load-more btn btn-dark" data-totalResult="{{ count($data->reviews) }}">Load More</button></p>
                     @endif

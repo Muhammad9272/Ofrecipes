@@ -773,6 +773,13 @@ $('button.addProductSubmit-btn').prop('disabled',true);
           }
           geniusform.find('input , select , textarea').eq(1).focus();
         }
+        else if(data[0]==1){
+          geniusform.parent().find('.alert-danger').hide();
+          geniusform.parent().find('.alert-success').show();
+          geniusform.parent().find('.alert-success p').html(data[1]);
+          geniusform.find('input , select , textarea').eq(1).focus();
+          $("#rc-pr-link").attr("href",data[2]);
+        }
         else
         {
           geniusform.parent().find('.alert-danger').hide();
@@ -1238,6 +1245,33 @@ $(document).on('click', function(e)
 
 
 // **************************************  AJAX REQUESTS SECTION ENDS *****************************************
+
+
+// ************** Current date time *************
+
+    $.fn.setNow = function (onlyBlank) {
+      var now = new Date($.now());
+      
+      var year = now.getFullYear();
+      
+      var month = (now.getMonth() + 1).toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
+      var date = now.getDate().toString().length === 1 ? '0'         + (now.getDate()).toString()      : now.getDate();
+      var hours = now.getHours().toString().length === 1 ? '0'       + now.getHours().toString()       : now.getHours();
+      var minutes = now.getMinutes().toString().length === 1 ? '0'   + now.getMinutes().toString()     : now.getMinutes();
+      var seconds = now.getSeconds().toString().length === 1 ? '0'   + now.getSeconds().toString()     : now.getSeconds();
+      
+      var formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes ;
+
+      if ( onlyBlank === true && $(this).val() ) {
+        return this;
+      }
+      
+      $(this).val(formattedDateTime);
+      
+      return this;
+    }
+// ************** Current date time ends *************
+
 
 
 })(jQuery);

@@ -24,6 +24,10 @@ class RecipeController extends Controller
          $datas = Recipe::orderBy('id','desc')->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
+                            ->editColumn('name', function(Recipe $data) {
+                                return 
+                                '<a class="text-black" href="'. route('admin-recipe-edit',$data->id) .'">'.$data->name.'</a>';
+                            })
                             ->editColumn('publish_date', function(Recipe $data) {
                                 if($data->publish_check==1){
                                     return $data->publish_date;
@@ -88,8 +92,8 @@ class RecipeController extends Controller
                             })
                             ->addColumn('action', function(Recipe $data) {
                                     return
-                                    '<div class="action-list">
-                                        <div class="btn-group">
+                                    '<div class="action-list rc-action-btn">
+                                        <div class="btn-group ">
                                             <button class="btn blue-hoki dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> <i class="icon-settings"></i> Actions
                                                 <i class="fa fa-angle-down"></i>
                                             </button>
@@ -115,7 +119,7 @@ class RecipeController extends Controller
                                     </div>';
 
                             }) 
-                            ->rawColumns(['select','status','photo', 'action'])
+                            ->rawColumns(['select','name','status','photo', 'action'])
                             ->toJson(); //--- Returning Json Data To Client Side
 
 
@@ -326,10 +330,13 @@ class RecipeController extends Controller
         }
 
 
-
+        // dd($data->slug);
         //--- Redirect Section     
         $msg = 'Data Updated Successfully.';
-        return response()->json($msg);      
+        $data[0]=1;
+        $data[1]=$msg;
+        $data[2]=route('front.recipe',$data->slug); 
+        return response()->json($data);     
         //--- Redirect Section Ends                 
     }
 
@@ -352,6 +359,21 @@ class RecipeController extends Controller
         }    
 
         $data->ingredients()->delete();
+
+        if($data->reviews->count() > 0)
+        {
+            foreach ($data->reviews  as $elements) {
+                if($elements->replies->count() > 0)
+                {
+                    foreach ($elements->replies  as $gal) {
+                        $gal->delete();
+                    }
+                }
+                $elements->delete();
+            }
+        }
+
+
         $data->delete();
         //--- Redirect Section     
         $msg = 'Data Deleted Successfully.';
@@ -443,16 +465,40 @@ class RecipeController extends Controller
                     'updated_date' => $request->updated_date,
                 ]);
              }
-
             if($action==6){
+
+                 $data=Recipe::whereIn('id',$ids)
+                 ->update([
+                    'post_schedule' =>$request->post_schedule                    
+                ]);
+             }
+            if($action==7){
                  $data=Recipe::whereIn('id',$ids)
                  ->update([
                     'is_featured' =>$request->is_featured?1:0,
                     'is_trending' => $request->is_trending?1:0,
                 ]);
              }
-            if($action==7){
-                 $data=Recipe::whereIn('id',$ids)->delete();
+            if($action==8){
+
+               $datas=Recipe::whereIn('id',$ids)->get();
+                foreach ($datas  as $data) {
+                   if($data->reviews->count() > 0)
+                    {
+                        foreach ($data->reviews  as $elements) {
+                            if($elements->replies->count() > 0)
+                            {
+                                foreach ($elements->replies  as $gal) {
+                                    $gal->delete();
+                                }
+                            }
+                            $elements->delete();
+                        }
+                    }
+                    $data->delete();
+                }
+
+                 
              }
 
 

@@ -42,10 +42,11 @@
                     <form id="geniusform" class="form-horizontal rc-form" action="{{route('admin-recipe-update',$data->id)}}" method="post" enctype="multipart/form-data" role="form">
                         <div class="side-btn-save">
                            <div>
+                            <a id="rc-pr-link" href="{{route('front.recipe',$data->slug)}}" class="btn btn-lg green-haze btn-outline">Preview</a>
                                <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
-                                <i class="fa fa-check"></i> Save </button>
+                                <i class="fa fa-check"></i> Update </button>
                            </div>
-                       </div>
+                        </div>
 
                         @csrf
                         @include('includes.admin.form-both')
@@ -186,6 +187,14 @@
                
                                 </div>
                             </div>
+                            <div class="row"> 
+
+                                <label class="col-md-3 control-label" >Post Schedule</label>
+                                <div class="col-md-4 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" value="{{ Carbon\Carbon::parse($data->post_schedule)->format('Y-m-d\TH:i:s') }}" > 
+               
+                                </div>
+                            </div> 
 
                             <div class="row mb-10"> 
 
@@ -541,7 +550,7 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-10 col-md-2">
-                                    <button type="submit" class="btn blue btn-block addProductSubmit-btn">Save</button>
+                                    <button type="submit" class="btn blue btn-block addProductSubmit-btn">Update</button>
                                 </div>
                             </div>
                         </div>

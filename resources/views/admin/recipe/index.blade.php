@@ -66,8 +66,8 @@
 
                                   <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Publish Date</label>
-                                       <input type="text" placeholder="Date" class="form-control filter-input" data-id="column-4" >
+                                        <label>Publish Date </label>
+                                       <input type="date" placeholder="Date" class="form-control filter-select date-clear" data-id="column-4" >
                                     </div>                                     
                                   </div>
                                 </div>
@@ -170,15 +170,19 @@
                               <input data-id="upl-date" type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios26" value="5" > Change Updated date
                               <span></span>
                           </label>
+                          <label class="mt-radio mt-radio-outline">
+                              <input data-id="ps-sc-date" type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios27" value="6" > Change Post Scheduled Date
+                              <span></span>
+                          </label>
 
  
                           <label class="mt-radio mt-radio-outline">
-                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios28" data-id="rc-highlight" value="6"  > Highlight Recipe
+                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios28" data-id="rc-highlight" value="7"  > Highlight Recipe
                               <span></span>
                           </label>
 
                           <label class="mt-radio mt-radio-outline">
-                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios27" value="7" > Delete Recipes
+                              <input type="radio" class="bulkEditRadio" name="bulkEditRadios" id="optionsRadios29" value="8" > Delete Recipes
                               <span></span>
                           </label> 
 
@@ -258,6 +262,16 @@
            
                             </div>
                           </div>
+                      </div>
+                      <div class="row mdr-hide" id="ps-sc-date">
+                        <div class="row" style="margin-left: 15px;"> 
+
+                                <label class="col-md-3 control-label"  >Post Schedule</label>
+                                <div class="col-md-6 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" > 
+               
+                                </div>
+                            </div>    
                       </div>
                       <div class="row mdr-hide" id="ch-status"> 
                           <div class="mt-radio-list" style="margin-left: 15px;">
@@ -395,10 +409,12 @@
 
 <!-- Bulk edit check box -->
 <script type="text/javascript">
+
+
    
     $(document).ready(function () {
 
-
+       $("#post-schedule").setNow();
        $('#geniustable_filter input').addClass('custom-search-op');
 
 
@@ -409,7 +425,6 @@
         $('.filter-select').change( function() {
           table.column('#'+$(this).attr('data-id')).search( $(this).val() ).draw();
         } );
-
         
         $('#master_select').on('click', function(e) {
           

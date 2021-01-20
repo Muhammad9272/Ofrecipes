@@ -185,7 +185,15 @@
                                 </div>
                             </div>
 
-                                                   
+                            <div class="row"> 
+
+                                <label class="col-md-3 control-label" >Post Schedule</label>
+                                <div class="col-md-4 d-inline-flex">
+                                    <input class="input-group form-control form-control-inline" type="datetime-local" id="post-schedule" name="post_schedule" > 
+               
+                                </div>
+                            </div>                                   
+                                                 
 
                             <div class="row mb-10"> 
 
@@ -660,9 +668,12 @@
 <script type="text/javascript">
 
 
-
-
   $(document).ready(function() {
+
+
+      $("#post-schedule").setNow();
+
+
       $("#rc-em-link-sbtn").on('click',function(){
         $('#rc-em-link').show();
         $('#rc-vd-div').hide();

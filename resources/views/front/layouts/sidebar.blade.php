@@ -23,11 +23,11 @@
            		@endif
            		<div class="ps-post">
            			<div class="e-book">
-           				<div class="e-content">
-           					<h3>Get a Free eCookbook!</h3>
-           					<p class="sp-txt">
-                             {{$gs->eCookbook}}</p>
-                             <h4 class="mt-20 mb-20">Your Details</h4>
+           				<div class="e-content e-book-h">
+           					{{-- <h3>Get a Free eCookbook!</h3> --}}
+           					<p class="">
+                             {!! $gs->eCookbook !!}</p>
+                             {{-- <h4 class="mt-20 mb-20">Your Details</h4> --}}
            					<form class="e-book-form subscribeform" action="{{route('front.subscribe')}}"  method="post">
            						@csrf
            						<div class="form-row">

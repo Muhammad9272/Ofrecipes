@@ -111,10 +111,20 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::post('/recipe/review/edit/{id}', 'Admin\ReviewController@update')->name('admin-recipe-review-update');
   Route::get('/recipe/review/delete/{id}', 'Admin\ReviewController@destroy')->name('admin-recipe-review-delete');
   Route::get('/recipe/review/status/{id1}/{id2}', 'Admin\ReviewController@status')->name('admin-recipe-review-status');
+  Route::post('bulk/recipe/review/', 'Admin\ReviewController@bulkeditReview')->name('admin-recipe-review-bulkedit');
   // Route::get('/load/review/recipe/{id}/', 'Admin\RecipeController@load')->name('admin-recipe-load'); //JSON REQUEST
 
   // RECIPE Reviews SECTION ENDS------------
+  // RECIPE Replies SECTION Starts------------
+  Route::get('/recipe/reply/datatables', 'Admin\ReviewController@datatablesReply')->name('admin-recipe-reply-datatables'); //JSON REQUEST
+  Route::get('/recipe/reply/', 'Admin\ReviewController@indexReply')->name('admin-recipe-reply-index');
+  Route::get('/recipe/reply/status/{id1}/{id2}', 'Admin\ReviewController@statusReply')->name('admin-recipe-reply-status');
 
+  Route::get('/recipe/reply/delete/{id}', 'Admin\ReviewController@destroyReply')->name('admin-recipe-reply-delete');
+
+  Route::post('bulk/recipe/reply/', 'Admin\ReviewController@bulkeditReply')->name('admin-recipe-reply-bulkedit');
+
+  // RECIPE Replies SECTION ENDS------------
 
 
 
@@ -152,6 +162,15 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::post('/blog/slug/update', 'Admin\ArticleController@updateBlogSlug')->name('admin-article-slug-update');
   Route::post('/bulk/blog/', 'Admin\ArticleController@bulkedit')->name('admin-blog-bulkedit');
 
+ // Blog Comments //
+  Route::get('/blog/comment/datatables', 'Admin\ArticleController@datatablesComment')->name('admin-article-datatablesComment'); //JSON REQUEST
+  Route::get('/blog/comment', 'Admin\ArticleController@indexComment')->name('admin-article-indexComment');
+
+  Route::get('/blog/comment/status/{id1}/{id2}', 'Admin\ArticleController@statusComment')->name('admin-article-statusComment');
+  Route::get('/blog/comment/delete/{id}', 'Admin\ArticleController@destroyComment')->name('admin-article-deleteComment');
+ Route::post('/bulk/blog/comment/', 'Admin\ArticleController@bulkeditComment')->name('admin-blog-comment-bulkedit');
+
+// Blog Comments Ends //
 
   Route::get('/blog/category/datatables', 'Admin\BlogCategoryController@datatables')->name('admin-cblog-datatables'); //JSON REQUEST
   Route::get('/blog/category', 'Admin\BlogCategoryController@index')->name('admin-cblog-index');

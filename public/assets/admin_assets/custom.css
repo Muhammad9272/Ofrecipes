@@ -12,6 +12,9 @@
 .blog-slug{
   margin: 0 20px;
 }
+.rc-action-btn .open{
+  position: absolute;
+}
 .blog-slug .blog-slug-2 .form-control{
   margin-right: 10px;
   border: none;
@@ -170,6 +173,9 @@ box-shadow: 0 6px 12px rgba(0,0,0,.175) !important;
  }
  .text-white{
   color: white !important;
+ }
+ .text-black{
+  color: black !important;
  }
  .h-100{
   height: 100px !important;
