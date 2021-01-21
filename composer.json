@@ -45,6 +45,18 @@
             "database/factories"
         ]
     },
+    "autoload": {
+        "files":[
+            "app/Http/Helpers/helpers.php"
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ]
+    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"

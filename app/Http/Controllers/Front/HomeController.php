@@ -34,7 +34,7 @@ class HomeController extends Controller
     public function index()
     {
         
-        $time=$this->get_local_time();
+        $time=get_local_time();        
         $top_banner = Banner::where('slug','top-banner')->first();
         $bottom_banner = Banner::where('slug','bottom-banner')->first();
         $sliders=Slider::where('status',1)->get();
@@ -51,6 +51,7 @@ class HomeController extends Controller
         $about = PgAbout::findOrFail(1);
 
         $recipes=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date', 'asc')->get();
+
 
         $recipe_latest=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date')->get();
 
@@ -79,7 +80,7 @@ class HomeController extends Controller
 
     public function categorydetail($slug1='',$slug2='')
     {   
-        $time=$this->get_local_time();
+        $time=get_local_time();
         if(\Route::current()->getName() == 'front.recipe.all'){
             $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->paginate(10);
             $data='';
@@ -130,7 +131,7 @@ class HomeController extends Controller
 
     public function RecipeSearch(Request $request)
     {
-      $time=$this->get_local_time();
+      $time=get_local_time();
 
        $search=$request->search;
        $datas=Recipe::where('post_schedule','<=',$time)->where('name', 'like', '%' . $search . '%')->where('status',1)->paginate(10);
@@ -145,7 +146,7 @@ class HomeController extends Controller
 
     public function recipedetail($slug)
     { 
-        $time=$this->get_local_time();
+        $time=get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Recipe::where('slug','=',$slug)->first(); 
         }
@@ -168,7 +169,7 @@ class HomeController extends Controller
 
     public function printpage($slug)
     {
-        $time=$this->get_local_time();
+        $time=get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Recipe::where('slug','=',$slug)->first(); 
         }
@@ -188,7 +189,7 @@ class HomeController extends Controller
     public function page($slug,$slug2='')
     {   
         $data=PgOther::where('slug',$slug)->first();
-        $time=$this->get_local_time();
+        $time=get_local_time();
         if(isset($data) && $data->id==5){
             if($slug2){
                 $bcat=BlogCategory::where('slug',$slug2)->where('status',1)->first();
@@ -219,7 +220,7 @@ class HomeController extends Controller
 
     public function blogdetail($slug)
     {  
-        $time=$this->get_local_time();
+        $time=get_local_time();
         if(Auth::guard('admin')->check()){
            $data=Article::where('slug',$slug)->first(); 
         }
@@ -480,23 +481,6 @@ class HomeController extends Controller
     {
         return response()->json(['captcha'=> captcha_img()]);
     }
-
-    function get_local_time(){
-
-       $ip = file_get_contents("http://ipecho.net/plain");
-
-       $url = 'http://ip-api.com/json/'.$ip;
-
-       $tz = file_get_contents($url);
-
-       $tz = json_decode($tz,true)['timezone'];
-
-       $time=Carbon::now($tz);
-       $time=$time->format('Y-m-d H:i:s');
-
-       return $time;
-
-    } 
 
 
 

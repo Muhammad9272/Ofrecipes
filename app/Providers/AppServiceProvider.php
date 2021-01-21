@@ -37,8 +37,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
          view()->composer('*',function($settings){
-            $time=$this->get_local_time();
             
+            $time=get_local_time();           
             $settings->with('gs', DB::table('generalsettings')->find(1));
 
             $settings->with('sb1', DB::table('banners')->where('slug','side-banner1')->first());
@@ -67,21 +67,6 @@ class AppServiceProvider extends ServiceProvider
     }
 
 
-     function get_local_time(){
-
-       $ip = file_get_contents("http://ipecho.net/plain");
-
-       $url = 'http://ip-api.com/json/'.$ip;
-
-       $tz = file_get_contents($url);
-
-       $tz = json_decode($tz,true)['timezone'];
-
-       $time=Carbon::now($tz);
-       $time=$time->format('Y-m-d H:i:s');
-
-       return $time;
-
-    } 
+    
 
 }
