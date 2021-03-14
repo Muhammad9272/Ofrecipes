@@ -7,6 +7,15 @@
 <link href="{{ asset('assets/admin_assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('assets/admin_assets/global/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
+{{-- ck editor --}}
+{{-- <link href="{{ asset('assets/admin_assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css')}}" rel="stylesheet" type="text/css" /> --}}
+{{-- ck editor --}}
+
+<style type="text/css">
+    .modal-content{
+        padding: 10px;
+    }
+</style>
 @endsection
 
 @section('page_content')
@@ -23,6 +32,7 @@
                 </a>
                 <span class="caption-subject font-red-sunglo bold uppercase">Add Recipe</span>
                 <div class="btn-group">
+
                     <a id="sample_editable_1_new" class="btn sbold green" href="{{route('admin-recipe-index')}}"> <i class="fa fa-arrow-left"></i>&nbsp;Back
                         
                     </a>
@@ -42,6 +52,7 @@
                     <form class="form-horizontal rc-form" action="{{route('admin-recipe-store')}}" id="geniusform" method="post" enctype="multipart/form-data" role="form">
                        <div class="side-btn-save">
                            <div>
+
                                <button type="submit" class="btn btn-lg blue addProductSubmit-btn">
                                 <i class="fa fa-check"></i> Save </button>
                            </div>
@@ -357,6 +368,20 @@
                
                                 </div> 
                             </div>
+
+                            <div class="row mb-15">
+                                <label class="col-md-3 control-label" >Child category</label>
+                                <div class="col-md-8">
+                                    <select id="" name="childcat_id[]" class="form-control select2-multiple" data-placeholder="Select Child Category" multiple>
+                                        <option disabled="">Select child category</option>
+                                        @foreach($childcats as $childcat)                                    
+                                            <option value="{{$childcat->id}}">{{$childcat->name}}</option>
+                                        @endforeach
+                                    </select>
+               
+                                </div> 
+                            </div>
+
                             <div class="row">
                                 <label class="col-md-3 control-label" >Keywords</label>
                                 <div class="col-md-8">
@@ -371,13 +396,20 @@
                             <div class="form-group last">
                                 <label class="col-md-3 control-label" >Add Equipment</label>
                                 <div class="col-md-8">
-                                    <textarea class="nic-edit" id="r-equipment" name="equipment" style="width: 100%;">
+                                    <textarea id="r-equipment" class="nic-edit" name="equipment" ></textarea> 
                                         
-                                    </textarea>  
+                                    
                
                                 </div> 
                             </div>
+
                         </div>
+
+
+
+
+
+
                         <div class="rc-section section-7">
                             <h4>Ingredients</h4>
                              <hr>
@@ -392,11 +424,14 @@
                                                     <input type="number" placeholder="3" class="form-control" step="0.01" name="ingredient_amount"   /> </div>
                                                 <div class="col-md-2">
                                                     <label class="control-label">Unit</label>
-                                                    <input type="text" name="ingrdient_unit" placeholder="tpsp" class="form-control" /> </div>
+                                                    <input type="text" name="ingrdient_unit" placeholder="tbsp" class="form-control" /> </div>
 
                                                 <div class="col-md-6">
                                                     <label class="control-label">Name</label>
-                                                    <input type="text" name="ingrdient_name" placeholder="Salted Tuna" class="form-control" /> </div>
+                                                     <textarea  name="ingrdient_name" placeholder="Salted Tuna" class="form-control summernote" >
+                                                        
+                                                    </textarea> 
+                                                </div>
                                                 
                                                 <div class="col-md-1">
                                                     <label class="control-label">&nbsp;</label>
@@ -655,6 +690,14 @@
 
 @endsection
 @section('pagelevel_scripts')
+
+
+{{--         <script src="{{ asset('assets/admin_assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('assets/admin_assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js')}}" type="text/javascript"></script>
+       
+        
+        <script src="{{ asset('assets/admin_assets/global/plugins/bootstrap-summernote/summernote.min.js')}}" type="text/javascript"></script> --}}
+
          <script src="{{ asset('assets/admin_assets/img_upload/imgUpload.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/admin_assets/global/plugins/select2/js/select2.full.min.js')}}" type="text/javascript"></script>
 
@@ -793,7 +836,7 @@ $( document ).ready(function() {
                 $('[name="group-b['+last+'][ingredient_amount]"]').val(parseFloat(amount[0]));
                 ing_name =ks[k].replace(amount, "");
               }
-              $('[name="group-b['+last+'][ingrdient_name]"]').val(ing_name);  
+              $('[name="group-b['+last+'][ingrdient_name]"]').summernote('insertText', ing_name);  
 
             }
 
@@ -858,5 +901,38 @@ $( document ).ready(function() {
 
     })
 </script>
+<script>
+    $(document).ready(function() {
+       
+        $('.mt-repeater-add').on('click',function(){
+            $('.summernote').summernote({
+                airMode:true,
+                popover: {
+                    air: [
+                        ['insert', ['link', ]],  
+                        ['style', ['bold', 'italic', 'underline', 'clear']],                    
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                    ]
+                }
+            }); 
+             
+        });
+
+            $('.summernote').summernote({
+                airMode:true,
+                popover: {
+                    air: [
+                        ['insert', ['link', ]],  
+                        ['style', ['bold', 'italic', 'underline', 'clear']],                    
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                    ]
+                }
+            }); 
+
+
+    });
+  </script>
 
 @endsection

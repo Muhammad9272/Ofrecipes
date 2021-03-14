@@ -75,6 +75,20 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::post('subcategory/bulk/update', 'Admin\SubCategoryController@bulkedit')->name('admin-subcat-bulkedit');
   // SUBCATEGORY SECTION ENDS------------
 
+  // CHILDCATEGORY SECTION ------------
+
+  Route::get('/childcategory/datatables', 'Admin\ChildCategoryController@datatables')->name('admin-childcat-datatables'); //JSON REQUEST
+  Route::get('/childcategory', 'Admin\ChildCategoryController@index')->name('admin-childcat-index');
+  Route::get('/childcategory/create', 'Admin\ChildCategoryController@create')->name('admin-childcat-create');
+  Route::post('/childcategory/create', 'Admin\ChildCategoryController@store')->name('admin-childcat-store');
+  Route::get('/childcategory/edit/{id}', 'Admin\ChildCategoryController@edit')->name('admin-childcat-edit');
+  Route::post('/childcategory/edit/{id}', 'Admin\ChildCategoryController@update')->name('admin-childcat-update');
+  Route::get('/childcategory/delete/{id}', 'Admin\ChildCategoryController@destroy')->name('admin-childcat-delete');
+  Route::get('/childcategory/status/{id1}/{id2}', 'Admin\ChildCategoryController@status')->name('admin-childcat-status');
+  Route::get('/load/childcategories/{id}/', 'Admin\ChildCategoryController@load')->name('admin-childcat-load'); //JSON REQUEST
+
+  // CHILDCATEGORY SECTION ENDS------------
+
 
 
 
@@ -94,7 +108,7 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
   Route::post('/highlight/recipe/{id}/', 'Admin\RecipeController@highlightupdate')->name('admin-recipe-highlight');
 
   Route::post('/bulk/recipe/', 'Admin\RecipeController@bulkedit')->name('admin-recipe-bulkedit');
-
+  Route::post('/image-upload', 'Admin\RecipeController@ImageUpload')->name('admin-image-upload');
 
    //JSON REQUEST
 
@@ -243,7 +257,7 @@ Route::get('/generalsettings/edit', 'Admin\AdminController@gsedit')->name('admin
 
 Route::get('/', 'Front\HomeController@index')->name('front.index');
 
-Route::get('/recipe/{slug}', 'Front\HomeController@recipedetail')->name('front.recipe');
+
 Route::get('/recipe/{slug}/print', 'Front\HomeController@printpage')->name('recipe-print');
 
 
@@ -251,14 +265,15 @@ Route::get('/contact', 'Front\HomeController@contact')->name('front.contact');
 Route::post('/contact','Front\HomeController@contactemail')->name('front.contact.submit');
 
 
-Route::get('/category/{slug}', 'Front\HomeController@category')->name('front.category');
+Route::get('/main/{slug}', 'Front\HomeController@category')->name('front.category');
 
 
 Route::get('/recipes/all', 'Front\HomeController@categorydetail')->name('front.recipe.all');
 Route::get('/recipes/search', 'Front\HomeController@RecipeSearch')->name('front.recipe.search');
 
-Route::get('/category/{slug1}/{slug2}', 'Front\HomeController@categorydetail')->name('front.category.detail');
+Route::get('/category/{slug2}', 'Front\HomeController@categorydetail')->name('front.category.detail');
 
+Route::get('/category/{slug1}/{slug2}', 'Front\HomeController@childcategorydetail')->name('front.childcategory.detail');
 
 Route::get('/about-us', 'Front\HomeController@about')->name('front.about');
 
@@ -281,18 +296,10 @@ Route::get('/about-us', 'Front\HomeController@about')->name('front.about');
 
 Route::get('/load-captcha/new','Front\HomeController@loadCaptcha')->name('load-new-captcha');
 
-
-// Route::get('/articles/', 'Front\FrontendController@Articleid')->name('front.article.id');
-
-// Route::get('/articles/{slug}', 'Front\FrontendController@Article')->name('front.article');
-// Route::get('/faq', 'Front\FrontendController@faq')->name('front.faq');
-
-// Route::get('/contact/', 'Front\FrontendController@Contact')->name('front.contact');
-// Route::post('/contact','Front\FrontendController@contactemail')->name('front.contact.submit');
-
 Route::get('/{slug}/category/{slug1}', 'Front\HomeController@page')->name('front.blog.cat');
 
 Route::get('/blog/{slug}', 'Front\HomeController@blogdetail')->name('front.blog.detail');
 
-Route::get('/{slug}/', 'Front\HomeController@page')->name('front.page');
+Route::get('/{slug}/', 'Front\HomeController@page')->name('front.recipe');
+
 

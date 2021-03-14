@@ -41,6 +41,8 @@
     <link rel="stylesheet" href="{{asset('assets/front/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('assets/front/css/furniture.css')}}">
     <link rel="stylesheet" href="{{asset('assets/front/css/custom.css')}}">
+
+
   </head>
   <body>
     

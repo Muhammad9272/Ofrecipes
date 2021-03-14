@@ -1,3 +1,45 @@
+ .nav-cutum-1 .dropdown-menu{padding:0;margin:0;border:0 solid transition!important;border:0 solid rgba(0,0,0,.15);border-radius:0;-webkit-box-shadow:none!important;box-shadow:none!important}
+ .nav-cutum-1 .dropdown-menu li a {color:black;font-size:14px;text-transform:capitalize;padding:6px 15px;display: block !important;    font-family: "Poppins";}
+  .nav-cutum-1 .dropdown .colr-ornge{
+   padding: 0px 0px 15px 0px;
+   display: inline-block;
+   font-size: 15px;
+    color: white;
+    font-weight: 500;
+  }
+ 
+/*==========Sub Menu=v==========*/
+
+
+.nav-cutum-1 ul, .nav-cutum-1 ul.dropdown-menu{ -ms-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2) !important;}
+
+/******************************Drop-down menu work on hover**********************************/
+
+@media only screen and (min-width: 767px) {
+.nav-cutum-1 li:hover> ul{display:block}
+.nav-cutum-1 ul{position:absolute;top:100%;left:0;min-width:250px;display:none}
+/*******/
+.nav-cutum-1 ul li{position:relative}
+.nav-cutum-1 ul li:hover> ul{display:block}
+.nav-cutum-1 ul ul{position:absolute;top:0;left:100%;min-width:250px;display:none}
+/*******/
+.nav-cutum-1 ul ul li{position:relative}
+.nav-cutum-1 ul ul li:hover ul{display:block}
+.nav-cutum-1 ul ul ul{position:absolute;top:0;left:-100%;min-width:250px;display:none;z-index:1}
+
+}
+.mt-10{
+    margin-top:10px !important;
+}
+
+.menu--dropdown > li:hover{
+    background-color: white;
+}
+  .nav-cutum-1 .dropdown .colr-ornge:hover{
+   color: #ea5b21 !important;
+  
+  } 
 .gocover {
     display:none;
     position: absolute;
@@ -295,14 +337,17 @@ border-right: none;
 .ps-product .ps-product__price{
     margin-bottom: 18px;
 }
-
+.box-shadow{
+    -ms-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+}
 .ps-product__bottom-t .spn{
     color: #5a5a5a !important;
     font-size: 14px;
 }
 .ft-recipe .ps-product .ps-product__thumbnail{
  max-height: 241px;
- box-shadow: 0 8px 6px -6px #e2e0e0;
+
 
 }
 .ft-recipe .ps-product .box-shadow{

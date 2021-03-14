@@ -25,6 +25,12 @@
                     <span class="title">Manage SubCategory</span>                    
                 </a>
             </li>
+            <li class="nav-item start {{ (request()->is('admin/childcategory*')) || (request()->is('admin/childcategory/create*')) || (request()->is('admin/childcategory/edit*')) ? 'active' : '' }}">
+                <a href="{{route('admin-childcat-index')}}" >
+                    <i class="fa fa-child"></i>
+                    <span class="title">Manage ChildCategory</span>                    
+                </a>
+            </li>
 
 
 

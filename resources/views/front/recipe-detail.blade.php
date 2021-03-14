@@ -151,22 +151,22 @@
 				                            				<div class="col-6">
 				                            					<p class="sp-txt "> PREP TIME</p>
 				                            					<p class="sp-txt ">
-				                            						{{$data->prep_days>0?
+				                            						{{$data->prep_days?
 				                            							''.$data->prep_days.' days':''}} 
-				                            						{{$data->prep_hours>0?
+				                            						{{$data->prep_hours?
 				                            							''.$data->prep_hours.' hours':''}} 
-				                            						{{$data->prep_mins>0?
-				                            							''.$data->prep_mins.' mins':'0 mins'}}</p>
+				                            						{{$data->prep_mins?
+				                            							''.$data->prep_mins.' mins':''}}</p>
 				                            				</div>
 				                            				<div class="col-6">
 				                            					<p class="sp-txt ">COOK TIME</p>
 				                            					<p class="sp-txt ">
-				                            						{{$data->cook_days>0?
-				                            							''.$data->prep_days.' days':''}} 
-				                            						{{$data->cook_hours>0?
-				                            							''.$data->prep_hours.' hours':''}} 
-				                            						{{$data->cook_mins>0?
-				                            							''.$data->prep_mins.' mins':'0 mins'}}
+				                            						{{$data->cook_days?
+				                            							''.$data->cook_days.' days':''}} 
+				                            						{{$data->cook_hours?
+				                            							''.$data->cook_days.' hours':''}} 
+				                            						{{$data->cook_mins?
+				                            							''.$data->cook_days.' mins':''}}
 				                            					</p>
 				                            				</div>                                                                        				
 				                            			</div>
@@ -242,11 +242,13 @@
 					                            					    	<span data-value="{{$data->serving}}" class="serve_people">{{$data->serving}}</span> 
 					                            					    	{{$data->serving_text?$data->serving_text:'People'}}</p>
 				                            					    </div>
+				                            					    @if($data->calories)
 				                            					    <div class="rc-mr">
 					                                                	<p class="sp-txt ">CALORIES</p>
 					                            					    <p class="sp-txt ">{{$data->calories?
 					                            					    	''.$data->calories.' kcal':'not defined'}} </p>
 				                            					    </div>
+				                            					    @endif
 				                                                </div>
 				                            				</div> 
 					                            		</div>                                     
@@ -272,7 +274,7 @@
 					                                            		<span class="adjustable-val" data-value="{{$ingredient->amount}}">
 					                                            			{{$ingredient->amount}}</span>
 					                                            		@endif
-					                                            		<span>{{$ingredient->unit}} {{$ingredient->name}}</span>
+					                                            		<span>{{$ingredient->unit}}</span> <span class="d-inline-flex">{!! $ingredient->name !!}</span>
 					                                            	</li>
 					                                            	@endforeach
 					                                            	                                           	
@@ -555,9 +557,17 @@
 		$(".adjustable-val").each(function(){
            
            var orig_value=parseFloat($(this).attr('data-value'));
-           console.log(orig_value);
+           // console.log(orig_value);
            var adjust_val=orig_value*mult;
-           $(this).text(adjust_val.toFixed(1));
+           
+           var valueck =parseInt(adjust_val.toFixed(2).split('.')[1]);
+           if(valueck>0){
+           	 $(this).text(adjust_val.toFixed(1));
+           }
+           else{
+           	
+           	$(this).text(adjust_val.toFixed());
+           }           
            $('.serve_people').text(mult*serve);
          });
 

@@ -118,7 +118,7 @@
                                 </li>
                                 @endforeach
 
-                                <li><a class="sp-txt " href="{{route('front.page',$blogpgSlug->slug)}}"> Blog</a>
+                                <li><a class="sp-txt " href="{{route('front.recipe',$blogpgSlug->slug)}}"> Blog</a>
                                 </li>
                                 <li><a class="sp-txt " href="{{route('front.contact')}}"> Contact</a>
                                 </li>
@@ -142,7 +142,7 @@
       <div class="ps-footer__pages" style="">
           <p>
             @foreach($pgotherss as $pgothr)
-            <a class="ppn"  href="{{route('front.page',$pgothr->slug)}}">{{$pgothr->title}}</a>&nbsp;&nbsp;   
+            <a class="ppn"  href="{{route('front.recipe',$pgothr->slug)}}">{{$pgothr->title}}</a>&nbsp;&nbsp;   
             @endforeach
           </p>
 

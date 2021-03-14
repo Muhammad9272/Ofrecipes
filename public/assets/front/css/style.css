@@ -15049,7 +15049,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
           flex-flow: row nowrap;
   -webkit-box-pack: justify;
           justify-content: space-between;
-  padding: 15px 30px 10px;
+  padding: 10px;
   background-color: #fff;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
@@ -15058,7 +15058,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
 
 .mega-menu > * {
   width: 100%;
-  padding: 10px 15px;
+  /*padding: 10px 15px;*/
 }
 
 .mega-menu h4 {
@@ -15320,14 +15320,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
 }
 
 .menu--dropdown > li {
-  padding: 0 20px;
+  padding: 0px;
   -webkit-transition: all .4s ease;
   transition: all .4s ease;
 }
 
 .menu--dropdown > li > a {
   display: block;
-  padding: 10px 0;
+  padding: 6px 20px;
   color: #000;
 }
 
@@ -15341,7 +15341,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
   top: 0;
   left: 100%;
   width: auto;
-  min-width: 530px;
+  min-width: 250px;
   visibility: hidden;
   opacity: 0;
   border-left: none;

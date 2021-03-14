@@ -38,7 +38,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
          view()->composer('*',function($settings){
             
-            $time=get_local_time();           
+            $time=get_local_time();    
+      
             $settings->with('gs', DB::table('generalsettings')->find(1));
 
             $settings->with('sb1', DB::table('banners')->where('slug','side-banner1')->first());

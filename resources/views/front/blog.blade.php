@@ -19,7 +19,7 @@
         </div>
         <div class="ps-blog__header">
             <ul class="ps-list--blog-links">
-              <li class="{{$bslg=="All"?'active':''}}"><a href="{{route('front.page',$blogpgSlug->slug)}}">All</a></li>
+              <li class="{{$bslg=="All"?'active':''}}"><a href="{{route('front.recipe',$blogpgSlug->slug)}}">All</a></li>
               @foreach($b_cats as $b_cat)
                 <li class="{{$b_cat->slug==$bslg?'active':''}}"><a href="{{route('front.blog.cat',['slug'=>$blogpgSlug->slug,'slug1'=>$b_cat->slug])}}">{{$b_cat->name}}</a></li>
               @endforeach
@@ -28,8 +28,8 @@
           </div>
         <div class="ps-blog--sidebar">
 
-	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">                        
-	            <div class="row blog-pg-tag">
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">                        
+              <div class="row blog-pg-tag">
                     @if(count($datas)>0)
                        @foreach($datas as $data)
                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
@@ -60,29 +60,29 @@
                     @endif
                    
                         
-	            </div>
-	            <div class="ps-pagination">
-	              <ul class="pagination">
-	                <li>
+              </div>
+              <div class="ps-pagination">
+                <ul class="pagination">
+                  <li>
                    {{$datas->Oneachside(2)->links('includes.pagination.default')}} 
                   </li>
-	              </ul>
-	            </div>
-	        </div>
-	        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                </ul>
+              </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
   
                 @include('front.layouts.sidebar')
 
-	        </div>
+          </div>
         </div>
       </div>
     </div>
 
 
-	<div class="row">
-	    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 "></div>
-	    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 "></div>
-	</div>
+  <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 "></div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 "></div>
+  </div>
 
 
 @endsection

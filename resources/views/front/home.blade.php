@@ -25,7 +25,7 @@
       <div class="ps-home-trending-products ps-section--furniture mb-70" >
         <div class="container def-pad-slide" >
           <div class="ps-section__header">
-            <h3>Featured Recipe</h3>
+            <h3>Featured Recipes</h3>
           </div>
           <div class="ps-section__content ft-recipe">
             <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="{{$recipes->count()>3?'true':'false'}}" data-owl-dots="true" data-owl-item="3" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="2" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
@@ -101,11 +101,11 @@
                   <div class="row">
                   @foreach($cuisines as $cuisine)
                             <div class="ps-product">
-                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',['slug1'=>$cuisine->category->slug,'slug2'=>$cuisine->slug])}}"><img src="{{asset('assets/images/subcategories/'.$cuisine->photo)}}" alt=""></a>
+                              <div class="ps-product__thumbnail box-shadow"><a href="{{route('front.category.detail',['slug2'=>$cuisine->slug])}}"><img src="{{asset('assets/images/subcategories/'.$cuisine->photo)}}" alt=""></a>
                                
                               </div>
                               <div class="cat-pad-sec">
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug1'=>$cuisine->category->slug,'slug2'=>$cuisine->slug])}}">{{$cuisine->name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug2'=>$cuisine->slug])}}">{{$cuisine->name}}</a>
                                   
                                 </div>
 
@@ -273,11 +273,11 @@
                   <div class="row">
                   @foreach($courses as $course)
                             <div class="ps-product">
-                              <div class="ps-product__thumbnail"><a href="{{route('front.category.detail',['slug1'=>$course->category->slug,'slug2'=>$course->slug])}}"><img src="{{asset('assets/images/subcategories/'.$course->photo)}}" alt=""></a>
+                              <div class="ps-product__thumbnail box-shadow"><a href="{{route('front.category.detail',['slug2'=>$course->slug])}}"><img src="{{asset('assets/images/subcategories/'.$course->photo)}}" alt=""></a>
                                
                               </div>
                               <div class="cat-pad-sec">
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug1'=>$course->category->slug,'slug2'=>$course->slug])}}">{{$course->name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.category.detail',['slug2'=>$course->slug])}}">{{$course->name}}</a>
                                   
                                 </div>
 
@@ -313,7 +313,7 @@
       <div class="ps-home-trending-products ps-section--furniture margin-t-50">
         <div class="container def-pad">
           <div class="ps-section__header" style="text-align: left;">
-            <h3 class="mb-30">Latest Post</h3>
+            <h3 class="mb-30">Latest Posts</h3>
           </div>
           <div class="ps-blog__content">
             <div class="row">

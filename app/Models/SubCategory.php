@@ -14,4 +14,8 @@ class SubCategory extends Model
     {
     	return $this->belongsTo('App\Models\Category','category_id','id');
     }
+        public function childs()
+    {
+    	return $this->hasMany('App\Models\Childcategory','subcategory_id')->where('status','=',1);
+    }
 }

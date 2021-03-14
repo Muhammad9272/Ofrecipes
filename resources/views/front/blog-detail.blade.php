@@ -4,7 +4,7 @@
       <div class="container def-pad">
         <ul class="breadcrumb">
           <li><a class="" href="{{route('front.index')}}">Home</a></li>
-          <li><a class="" href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a></li>
+          <li><a class="" href="{{route('front.recipe',$blogpgSlug->slug)}}">Blog</a></li>
           <li class="text-white">{{$data->title}}</li>
            
         </ul>
@@ -17,10 +17,10 @@
       <div class="container def-pad">
 
         <div class="row mt-50">
-        	<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
-        		<div>
-        			<h1>{{$data->title}}</h1>
-        			                              {{-- <div class="ps-post__content"> --}}
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
+            <div>
+              <h1>{{$data->title}}</h1>
+                                            {{-- <div class="ps-post__content"> --}}
                                 <div class="ps-post__meta mt-30">
                                    
                                    <div class="blog-li-span">
@@ -33,14 +33,17 @@
                                     @if($data->updated_check==1 && $data->updated_date)
                                     <span class="sp-txt"><span class="tc-orange">Updated :</span>{{ Carbon\Carbon::parse($data->updated_date)->format('M d, Y') }}</span>
                                     @endif
-
                                    </div>
 
 
                                 </div>
-        		</div>
+            </div>
             <div class="mt-50">
-        		{!! $data->desc !!}
+              <div class="mb-30">
+                <p class="text-dark">{{$data->small_desc}}</p>
+                <img width="100%" src="{{asset('assets/images/articles/'.$data->photo)}}" alt="">
+              </div>
+            {!! $data->desc !!}
             </div>
             <div class="mt-100">
 
@@ -103,12 +106,12 @@
               
             </div>
 
-        	</div>
-	        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
   
                 @include('front.layouts.sidebar')
 
-	        </div>        	
+          </div>          
         </div>
 
       </div>

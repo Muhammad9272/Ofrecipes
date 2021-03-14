@@ -338,6 +338,11 @@ class ArticleController extends Controller
          $datas = Comment::orderBy('id','desc')->get();
          //--- Integrating This Collection Into Datatables
          return DataTables::of($datas)
+                            ->editColumn('comment', function(Comment $data) {
+                               
+                                return 
+                                '<div style="width:230px;display:block" ><p  class="text-black" style="width:100%" >'.$data->comment.'</p></div>';
+                            })
                             ->editColumn('blog_id', function(Comment $data) {
                                 return 
                                  $recipe =$data->blog?$data->blog->title:'Blog Deleted' ;
@@ -363,7 +368,7 @@ class ArticleController extends Controller
                                 <a data-href="'.route('admin-article-deleteComment',$data->id).'" class="btn btn-outline delete-data  btn-sm red" data-toggle="confirmation" data-placement="top" data-popout="true" data-id="'.$data->id.'" >
                                     <i class="fa fa-trash"></i> Delete </a></div>';
                             }) 
-                            ->rawColumns(['title','select','status', 'action'])
+                            ->rawColumns(['comment','select','status', 'action'])
                             ->toJson(); //--- Returning Json Data To Client Side
     }
 

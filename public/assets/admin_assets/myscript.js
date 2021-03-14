@@ -131,127 +131,73 @@ function enablekey()
           $('#subcat').load(link);
           $('#subcat').prop('disabled',false);
         }
-        $.get(getattrUrl + '?id=' + this.value + '&type=category', function(data) {
-          console.log(data);
-          let attrHtml = '';
-          for (var i = 0; i < data.length; i++) {
-            attrHtml += `
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="left-area">
-                    <h4 class="heading">${data[i].attribute.name} *</h4>
-                </div>
-              </div>
-              <div class="col-lg-7">
-            `;
 
-            for (var j = 0; j < data[i].options.length; j++) {
-              let priceClass = '';
-              if (data[i].attribute.price_status == 0) {
-                priceClass = 'd-none';
-              }
-              attrHtml += `
-                <div class="row mb-0 option-row">
-                  <div class="col-lg-5">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" id="${data[i].attribute.input_name}${data[i].options[j].id}" name="${data[i].attribute.input_name}[]" value="${data[i].options[j].name}" class="custom-control-input attr-checkbox">
-                      <label class="custom-control-label" for="${data[i].attribute.input_name}${data[i].options[j].id}">${data[i].options[j].name}</label>
-                    </div>
-                  </div>
-                  <div class="col-lg-7 ${priceClass}">
-                    <div class="row">
-                      <div class="col-2">
-                        +
-                      </div>
-                      <div class="col-10">
-                        <div class="price-container">
-                          <span class="price-curr">${curr.sign}</span>
-                          <input type="text" class="input-field price-input" id="${data[i].attribute.input_name}${data[i].options[j].id}_price" data-name="${data[i].attribute.input_name}_price[]" placeholder="0.00 (Additional Price)" value="">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              `;
-            }
-
-            attrHtml +=  `
-              </div>
-            </div>
-            `;
-          }
-
-          $("#catAttributes").html(attrHtml);
-          $("#subcatAttributes").html('');
-          $("#childcatAttributes").html('');
-        });
       });
   // Display Subcategories Ends
 
   // Display Childcategories & Attributes
-      $(document).on('change','#subcat',function () {
-        var link = $(this).find(':selected').attr('data-href');
-        if(link != "")
-        {
-          $('#childcat').load(link);
-          $('#childcat').prop('disabled',false);
-        }
+      // $(document).on('change','#subcat',function () {
+      //   var link = $(this).find(':selected').attr('data-href');
+      //   if(link != "")
+      //   {
+      //     $('#childcat').load(link);
+      //     $('#childcat').prop('disabled',false);
+      //   }
 
-        $.get(getattrUrl + '?id=' + this.value + '&type=subcategory', function(data) {
-          console.log(data);
-          let attrHtml = '';
-          for (var i = 0; i < data.length; i++) {
-            attrHtml += `
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="left-area">
-                    <h4 class="heading">${data[i].attribute.name} *</h4>
-                </div>
-              </div>
-              <div class="col-lg-7">
-            `;
+      //   $.get(getattrUrl + '?id=' + this.value + '&type=subcategory', function(data) {
+      //     console.log(data);
+      //     let attrHtml = '';
+      //     for (var i = 0; i < data.length; i++) {
+      //       attrHtml += `
+      //       <div class="row">
+      //         <div class="col-lg-4">
+      //           <div class="left-area">
+      //               <h4 class="heading">${data[i].attribute.name} *</h4>
+      //           </div>
+      //         </div>
+      //         <div class="col-lg-7">
+      //       `;
 
-            for (var j = 0; j < data[i].options.length; j++) {
-              let priceClass = '';
-              if (data[i].attribute.price_status == 0) {
-                priceClass = 'd-none';
-              }
-              attrHtml += `
-                  <div class="row option-row">
-                    <div class="col-lg-5">
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="${data[i].attribute.input_name}${data[i].options[j].id}" name="${data[i].attribute.input_name}[]" value="${data[i].options[j].name}" class="custom-control-input attr-checkbox">
-                        <label class="custom-control-label" for="${data[i].attribute.input_name}${data[i].options[j].id}">${data[i].options[j].name}</label>
-                      </div>
-                    </div>
-                    <div class="col-lg-7 ${priceClass}">
-                      <div class="row">
-                        <div class="col-2">
-                          +
-                        </div>
-                        <div class="col-10">
-                          <div class="price-container">
-                            <span class="price-curr">${curr.sign}</span>
-                            <input type="text" class="input-field price-input" id="${data[i].attribute.input_name}${data[i].options[j].id}_price" data-name="${data[i].attribute.input_name}_price[]" placeholder="0.00 (Additional Price)" value="">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              `;
-            }
+      //       for (var j = 0; j < data[i].options.length; j++) {
+      //         let priceClass = '';
+      //         if (data[i].attribute.price_status == 0) {
+      //           priceClass = 'd-none';
+      //         }
+      //         attrHtml += `
+      //             <div class="row option-row">
+      //               <div class="col-lg-5">
+      //                 <div class="custom-control custom-checkbox custom-control-inline">
+      //                   <input type="checkbox" id="${data[i].attribute.input_name}${data[i].options[j].id}" name="${data[i].attribute.input_name}[]" value="${data[i].options[j].name}" class="custom-control-input attr-checkbox">
+      //                   <label class="custom-control-label" for="${data[i].attribute.input_name}${data[i].options[j].id}">${data[i].options[j].name}</label>
+      //                 </div>
+      //               </div>
+      //               <div class="col-lg-7 ${priceClass}">
+      //                 <div class="row">
+      //                   <div class="col-2">
+      //                     +
+      //                   </div>
+      //                   <div class="col-10">
+      //                     <div class="price-container">
+      //                       <span class="price-curr">${curr.sign}</span>
+      //                       <input type="text" class="input-field price-input" id="${data[i].attribute.input_name}${data[i].options[j].id}_price" data-name="${data[i].attribute.input_name}_price[]" placeholder="0.00 (Additional Price)" value="">
+      //                     </div>
+      //                   </div>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //         `;
+      //       }
 
-            attrHtml +=  `
-              </div>
-            </div>
-            `;
-          }
+      //       attrHtml +=  `
+      //         </div>
+      //       </div>
+      //       `;
+      //     }
 
-          $("#subcatAttributes").html(attrHtml);
-          $("#childcatAttributes").html('');
-        });
-      });
+      //     $("#subcatAttributes").html(attrHtml);
+      //     $("#childcatAttributes").html('');
+      //   });
+      // });
   // Display Childcateogries & Attributes Ends
 
 
@@ -779,6 +725,10 @@ $('button.addProductSubmit-btn').prop('disabled',true);
           geniusform.parent().find('.alert-success p').html(data[1]);
           geniusform.find('input , select , textarea').eq(1).focus();
           $("#rc-pr-link").attr("href",data[2]);
+        }
+        else if(data[0]==99){
+          toastr.success(data[1]);
+          window.location=data[2];
         }
         else
         {

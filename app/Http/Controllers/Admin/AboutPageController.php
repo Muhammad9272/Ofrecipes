@@ -25,7 +25,7 @@ class AboutPageController extends Controller
 
         //--- Validation Section
         $rules = [
-               'photo'      => 'mimes:jpeg,jpg,png,svg',
+               'photo'      => 'mimes:jpeg,jpg,png,svg,gif',
                 ];
 
         $validator = Validator::make($request->all(), $rules);

@@ -6,7 +6,11 @@
 
 <link href="{{ asset('assets/admin_assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('assets/admin_assets/global/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-
+<style type="text/css">
+    .modal-content{
+        padding: 10px;
+    }
+</style>
 @endsection
 
 @section('page_content')
@@ -252,7 +256,7 @@
                                 <label class="control-label col-md-3">Recipe Image</label>
                                 <div class="col-md-3">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <div class="fileinput-new thumbnail" {{-- style="width: 200px; height: 150px;" --}}>
                                             <img src="{{$data->photo?asset('assets/images/recipe/'.$data->photo):'http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image'}}" alt="" /> </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
                                         <div>
@@ -371,6 +375,22 @@
                
                                 </div> 
                             </div>
+                            <div class="row mb-15">
+                                <label class="col-md-3 control-label" >Child category</label>
+                                <div class="col-md-8">
+                                    <select id="" name="childcat_id[]" class="form-control select2-multiple" data-placeholder="Select childcategory" multiple>
+                                        <option disabled="">Select Child category</option>
+
+                                            <?php $arr=json_decode($data->childcat_id);?>
+                                            @foreach($childcats as $childcat)
+                                            <option value="{{$childcat->id}}" @if(is_array($arr) &&in_array($childcat->id,$arr)) selected="" @endif>{{$childcat->name}}</option>
+                                            @endforeach
+
+                                    </select>
+               
+                                </div> 
+                            </div>
+
                             <div class="row">
                                 <label class="col-md-3 control-label" >Keywords</label>
                                 <div class="col-md-8">
@@ -394,6 +414,7 @@
                         </div>
                         <div class="rc-section section-7">
                             <h4>Ingredients</h4>
+                                               
                              <hr>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Product Variation</label>
@@ -407,11 +428,14 @@
                                                     <input type="number" step="0.01" placeholder="3" class="form-control" value="{{$ing->amount}}" name="ingredient_amount"  /> </div>
                                                 <div class="col-md-2">
                                                     <label class="control-label">Unit</label>
-                                                    <input type="text" name="ingrdient_unit" placeholder="tpsp" value="{{$ing->unit}}" class="form-control" /> </div>
+                                                    <input type="text" name="ingrdient_unit" placeholder="tbsp" value="{{$ing->unit}}" class="form-control" /> </div>
 
                                                 <div class="col-md-6">
                                                     <label class="control-label">Name</label>
-                                                    <input type="text" name="ingrdient_name" placeholder="Salted Tuna" value="{{$ing->name}}" class="form-control" /> </div>
+                                                    <textarea  name="ingrdient_name" placeholder="Salted Tuna" class="form-control summernote" >
+                                                        {!! $ing->name !!}
+                                                    </textarea> 
+                                                </div>
                                                 
                                                 <div class="col-md-1">
                                                     <label class="control-label">&nbsp;</label>
@@ -429,11 +453,14 @@
                                                         <input type="number" step="0.01" placeholder="3" class="form-control" name="ingredient_amount"  /> </div>
                                                     <div class="col-md-2">
                                                         <label class="control-label">Unit</label>
-                                                        <input type="text" name="ingrdient_unit" placeholder="tpsp" class="form-control" /> </div>
+                                                        <input type="text" name="ingrdient_unit" placeholder="tbsp" class="form-control" /> </div>
 
                                                     <div class="col-md-6">
                                                         <label class="control-label">Name</label>
-                                                        <input type="text" name="ingrdient_name" placeholder="Salted Tuna" class="form-control" /> </div>
+                                                        <textarea  name="ingrdient_name" placeholder="Salted Tuna" class="form-control summernote" >
+                                                       
+                                                        </textarea> 
+                                                    </div>
                                                     
                                                     <div class="col-md-1">
                                                         <label class="control-label">&nbsp;</label>
@@ -851,7 +878,9 @@ $( document ).ready(function() {
                 $('[name="group-b['+last+'][ingredient_amount]"]').val(parseFloat(amount[0]));
                 ing_name =ks[k].replace(amount, "");
               }
-              $('[name="group-b['+last+'][ingrdient_name]"]').val(ing_name);  
+              // $('[name="group-b['+last+'][ingrdient_name]"]').val(ing_name);  
+
+              $('[name="group-b['+last+'][ingrdient_name]"]').summernote('insertText', ing_name);
 
             }
 
@@ -917,4 +946,37 @@ $( document ).ready(function() {
     })
 </script>
 
+<script>
+    $(document).ready(function() {
+       
+        $('.mt-repeater-add').on('click',function(){
+            $('.summernote').summernote({
+                airMode:true,
+                popover: {
+                    air: [
+                        ['insert', ['link', ]],  
+                        ['style', ['bold', 'italic', 'underline', 'clear']],                    
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                    ]
+                }
+            }); 
+             
+        });
+
+            $('.summernote').summernote({
+                airMode:true,
+                popover: {
+                    air: [
+                        ['insert', ['link', ]],  
+                        ['style', ['bold', 'italic', 'underline', 'clear']],                    
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                    ]
+                }
+            }); 
+
+
+    });
+  </script>
 @endsection

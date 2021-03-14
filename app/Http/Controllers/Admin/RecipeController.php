@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Childcategory;
 use App\Models\Recipe;
 use App\Models\SubCategory;
 use App\Models\Subscriber;
@@ -134,19 +135,38 @@ class RecipeController extends Controller
         $datas = Recipe::orderBy('id','desc')->get();
         $coursess=SubCategory::where('category_id',1)->get();
         $cuisiness=SubCategory::where('category_id',2)->get();
+        
         return view('admin.recipe.index',compact('datas','coursess','cuisiness'));
     }
 
     public function create($value='')
     {   
+        $childcats=Childcategory::where('status',1)->get();
     	$courses=SubCategory::where('category_id',1)->where('status',1)->get();
     	$cuisines=SubCategory::where('category_id',2)->where('status',1)->get();
-    	return view('admin.recipe.create',compact('courses','cuisines'));
+    	return view('admin.recipe.create',compact('courses','cuisines','childcats'));
+    }
+
+    public function ImageUpload($value='')
+    {
+        // if ($_FILES['file']['name']) {
+        //   if (!$_FILES['file']['error']) {
+        //     $name = md5(rand(100, 200));
+        //     $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+        //     $filename = $name.
+        //     '.'.$ext;
+        //     $destination = '/assets/images/'.$filename; //change this directory
+        //     $location = $_FILES["file"]["tmp_name"];
+        //     move_uploaded_file($location, $destination);
+        //     return 'http://test.yourdomain.al/images/'.$filename; //change this URL
+        //   } else {
+        //     echo $message = 'Ooops!  Your upload triggered the following error:  '.$_FILES['file']['error'];
+        //   }
+        // }
     }
 
     public function store(Request $request)
     {   
-        
 
         $rules = ['slug' => 'unique:recipes'];
         $customs = ['slug.unique' => 'This slug has already been taken.'];
@@ -196,12 +216,18 @@ class RecipeController extends Controller
         else{
             $input['recipes_id']=null;
         }
+        if($request->childcat_id){
+            $input['childcat_id'] = json_encode($request->childcat_id);
+        }
+        else{
+            $input['childcat_id']=null;
+        }
         $input['publish_check']=$request->publish_check;
         $input['updated_check']=$request->updated_check;
 
 
-
-        
+ 
+       
         
         $data->fill($input)->save();
         //--- Logic Section Ends
@@ -222,25 +248,31 @@ class RecipeController extends Controller
         }
         
 
-        //--- Redirect Section        
-        $msg = 'New Data Added Successfully.';
-        return response()->json($msg);      
+
+        $msg = 'Data Added Successfully.';
+        $data[0]=99;
+        $data[1]=$msg;
+        $data[2]=route('admin-recipe-edit',$data->id);
+
+        return response()->json($data);      
         //--- Redirect Section Ends   
 
     }
+
     //*** GET Request
     public function edit($id)
     {
         $data = Recipe::findOrFail($id);
         $recipes=SubCategory::where('category_id',1)->where('status',1)->get();
         $cuisines=SubCategory::where('category_id',2)->where('status',1)->get();
-        return view('admin.recipe.edit',compact('data','recipes','cuisines'));
+        $childcats=Childcategory::where('status',1)->get();
+        return view('admin.recipe.edit',compact('data','recipes','cuisines','childcats'));
     }
 
     //*** POST Request
     public function update(Request $request, $id)
     {   
-        // dd($request->publish_check);
+
         $rules = [
                'photo'      => 'mimes:jpeg,jpg,png,svg',
                'slug' => 'unique:recipes,slug,'.$id.'|regex:/^[a-zA-Z0-9\s-]+$/',
@@ -301,6 +333,12 @@ class RecipeController extends Controller
             }
             if($request->recipes_id){
                 $input['recipes_id'] = json_encode($request->recipes_id);
+            }
+            else{
+                $input['recipes_id']=null;
+            }
+            if($request->childcat_id){
+                $input['childcat_id'] = json_encode($request->childcat_id);
             }
             else{
                 $input['recipes_id']=null;

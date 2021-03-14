@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Banner;
 use App\Models\BlogCategory;
 use App\Models\Category;
+use App\Models\Childcategory;
 use App\Models\Comment;
 use App\Models\Generalsetting;
 use App\Models\Partner;
@@ -34,12 +35,12 @@ class HomeController extends Controller
     public function index()
     {
         
-        $time=get_local_time();        
+        $time=get_local_time();
         $top_banner = Banner::where('slug','top-banner')->first();
         $bottom_banner = Banner::where('slug','bottom-banner')->first();
         $sliders=Slider::where('status',1)->get();
 
-        $blog_latest=Article::where('status',1)->where('post_schedule','<=',$time)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date')->take(4)->get();
+        $blog_latest=Article::where('status',1)->where('post_schedule','<=',$time)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date','desc')->take(4)->get();
 
         
 
@@ -53,10 +54,10 @@ class HomeController extends Controller
         $recipes=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date', 'asc')->get();
 
 
-        $recipe_latest=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date')->get();
+        $recipe_latest=Recipe::where('is_featured',1)->where('post_schedule','<=',$time)->where('status',1)->where('publish_check',1)->where('publish_date','!=',null)->orderBy('publish_date','desc')->get();
 
          $page_no=1;
-    	return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','recipe_latest','courses','cuisines','partners','about','recipes','page_no'));
+        return view('front.home',compact('top_banner','bottom_banner','sliders','blog_latest','recipe_latest','courses','cuisines','partners','about','recipes','page_no'));
     }
 
 
@@ -68,7 +69,8 @@ class HomeController extends Controller
 
         $page_no=2; 
         if($datas)  {
-            return view('front.category',compact('datas','data','page_no'));
+            $ad_check=$data->id==1?1:2;
+            return view('front.category',compact('datas','data','page_no','ad_check'));
         }  
         else{
             return view('errors.404');
@@ -78,33 +80,43 @@ class HomeController extends Controller
 
 
 
-    public function categorydetail($slug1='',$slug2='')
+    public function categorydetail($slug2='')
     {   
         $time=get_local_time();
         if(\Route::current()->getName() == 'front.recipe.all'){
-            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->paginate(10);
+            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date','desc')->paginate(10);
             $data='';
             $ad_check=1;
             return view('front.category-detail',compact('datas','data','ad_check'));
         }
-        $main_cat=Category::where('slug',$slug1)->first();
+
+        
         $sub=SubCategory::where('slug',$slug2)->first();
+        $slug1=$sub->category->slug;
+        $main_cat=Category::where('slug',$slug1)->first();
         $data=$sub;
 
         $datas='';        
         if ($sub) {                          
             $ids=[];
-               $recipes=Recipe::where('post_schedule','<=',$time)->where('recipes_id','!=',null)->where('recipes_id','!=','')->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
+                
                 if($main_cat->id==2){ 
+                   $recipes=Recipe::where('post_schedule','<=',$time)->where('cuisines_id','!=',null)->where('cuisines_id','!=','')->get();
+
                     foreach ($recipes as $datawise) {
                         $r_id=json_decode($datawise->cuisines_id);
 
                         if($r_id && in_array($sub->id,$r_id)){
                         $ids[]=$datawise->id ;                                       
                         }
-                    }                  
+                    }
+
+                    $ad_check=2;                  
                 }
                 else{
+
+                       $recipes=Recipe::where('post_schedule','<=',$time)->where('recipes_id','!=',null)->where('recipes_id','!=','')->get();
+
                         foreach ($recipes as $datawise) {
 
                             $r_id=json_decode($datawise->recipes_id); 
@@ -113,21 +125,74 @@ class HomeController extends Controller
                             $ids[]=$datawise->id ;                                       
                             }                  
                         } 
+                    $ad_check=1;
                 }
       
-            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->whereIn('id',$ids)->paginate(10);
+            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date','desc')->whereIn('id',$ids)->paginate(10);
           
           }
           
           if($datas){
             $page_no=3;
-            return view('front.category-detail',compact('datas','data','page_no'));
+            return view('front.category-detail',compact('datas','data','page_no','ad_check'));
           }
           else{
             return view('errors.404');
           }
         
     }
+
+
+    public function childcategorydetail($slug1,$slug2='')
+    {   
+        $time=get_local_time();
+        if(\Route::current()->getName() == 'front.recipe.all'){
+            $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date','desc')->paginate(10);
+            $data='';
+            $ad_check=1;
+            return view('front.category-detail',compact('datas','data','ad_check'));
+        }
+
+
+        
+
+        $childcat=Childcategory::where('slug',$slug2)->first();
+        $data=$childcat;
+        $main_cat=$childcat->subcategory->category;
+        if($main_cat->id==2){
+         $ad_check=2;
+        }
+        else{
+            $ad_check=1;
+        }
+
+
+        $datas='';        
+                                 
+               $ids=[];
+               $recipes=Recipe::where('post_schedule','<=',$time)->where('childcat_id','!=',null)->where('childcat_id','!=','')->get();
+               
+                    foreach ($recipes as $datawise) {
+                        $r_id=json_decode($datawise->childcat_id);
+
+                        if($r_id && in_array($childcat->id,$r_id)){
+                        $ids[]=$datawise->id ;                                       
+                        }
+                    }                
+                   $datas=Recipe::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date','desc')->whereIn('id',$ids)->paginate(10);
+
+          
+          if($datas){
+            $page_no=9;
+            return view('front.childcategory-detail',compact('datas','data','page_no','ad_check'));
+          }
+          else{
+            return view('errors.404');
+          }
+        
+    }
+
+
 
     public function RecipeSearch(Request $request)
     {
@@ -144,28 +209,28 @@ class HomeController extends Controller
     }
 
 
-    public function recipedetail($slug)
-    { 
-        $time=get_local_time();
-        if(Auth::guard('admin')->check()){
-           $data=Recipe::where('slug','=',$slug)->first(); 
-        }
-        else{
-           $data=Recipe::where('post_schedule','<=',$time)->where('slug','=',$slug)->where('status',1)->first(); 
-        }
+    // public function recipedetail($slug)
+    // { 
+    //     $time=get_local_time();
+    //     if(Auth::guard('admin')->check()){
+    //        $data=Recipe::where('slug','=',$slug)->first(); 
+    //     }
+    //     else{
+    //        $data=Recipe::where('post_schedule','<=',$time)->where('slug','=',$slug)->where('status',1)->first(); 
+    //     }
 
-    	
-        if($data){
-           $data->views = $data->views + 1;
-           $data->update();
-           $page_no=4; 
-           return view('front.recipe-detail',compact('data','page_no'));
-        }
-        else{
-            return view('errors.404');
-        }
-    	
-    }
+        
+    //     if($data){
+    //        $data->views = $data->views + 1;
+    //        $data->update();
+    //        $page_no=4; 
+    //        return view('front.recipe-detail',compact('data','page_no'));
+    //     }
+    //     else{
+    //         return view('errors.404');
+    //     }
+        
+    // }
 
     public function printpage($slug)
     {
@@ -189,15 +254,16 @@ class HomeController extends Controller
     public function page($slug,$slug2='')
     {   
         $data=PgOther::where('slug',$slug)->first();
+        $data2=Recipe::where('slug','=',$slug)->first();
         $time=get_local_time();
         if(isset($data) && $data->id==5){
             if($slug2){
                 $bcat=BlogCategory::where('slug',$slug2)->where('status',1)->first();
-                $datas=Article::where('post_schedule','<=',$time)->where('category_id',$bcat->id)->where('status',1)->orderBy('publish_date')->paginate(16);
+                $datas=Article::where('post_schedule','<=',$time)->where('category_id',$bcat->id)->where('status',1)->orderBy('publish_date','desc')->paginate(16);
                 $bslg=$bcat->slug;                
             }
             else{
-                $datas=Article::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date')->paginate(16);
+                $datas=Article::where('post_schedule','<=',$time)->where('status',1)->orderBy('publish_date','desc')->paginate(16);
                 $bslg='All';
             } 
             $page_no=5;           
@@ -209,6 +275,28 @@ class HomeController extends Controller
         else if(isset($data) && $data->status==1){
            $page_no=8;  
            return view('front.about',compact('data','page_no')); 
+        }
+
+
+        
+
+        else if(isset($data2)){
+               
+                if(Auth::guard('admin')->check()){
+                   $data=Recipe::where('slug','=',$slug)->first(); 
+                }
+                else{
+                   $data=Recipe::where('post_schedule','<=',$time)->where('slug','=',$slug)->where('status',1)->first(); 
+                }
+
+                
+                if($data){
+                   $data->views = $data->views + 1;
+                   $data->update();
+                   $page_no=4; 
+                   return view('front.recipe-detail',compact('data','page_no'));
+                }
+
         }
         else{
             return view('errors.404');
@@ -239,7 +327,7 @@ class HomeController extends Controller
         }
 
         
-    	
+        
     }
 
 
@@ -247,7 +335,7 @@ class HomeController extends Controller
     public function contact()
     {  
 
-    	return view('front.contact');
+        return view('front.contact');
     }
 
 

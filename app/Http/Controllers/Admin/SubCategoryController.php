@@ -162,7 +162,9 @@ class SubCategoryController extends Controller
             }
         $input['photo'] = $name;
         }
-
+        if($request->seo_check!=1){
+            $input['seo_check']=0;
+        }
         $data->update($input);
         //--- Logic Section Ends
 
@@ -202,7 +204,13 @@ class SubCategoryController extends Controller
         // return response()->json($msg);
         // //--- Redirect Section Ends
         // }
-
+        if($data->childs->count()>0)
+        {
+        //--- Redirect Section
+        $msg = 'Remove the Child Categories first !';
+        return response()->json($msg);
+        //--- Redirect Section Ends
+        }
 
         $data->delete();
         //--- Redirect Section

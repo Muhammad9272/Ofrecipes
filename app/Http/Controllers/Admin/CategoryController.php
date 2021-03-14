@@ -120,10 +120,12 @@ class CategoryController extends Controller
         //--- Logic Section
         $data = Category::findOrFail($id);
         $input = $request->all();
-
+        if($request->seo_check!=1){
+            $input['seo_check']=0;
+        }
         $data->update($input);
         //--- Logic Section Ends
-
+        
         //--- Redirect Section     
         $msg = 'Data Updated Successfully.';
         return response()->json($msg);      
@@ -150,13 +152,13 @@ class CategoryController extends Controller
         // //--- Redirect Section Ends
         // }
 
-        // if($data->subs->count()>0)
-        // {
-        // //--- Redirect Section
-        // $msg = 'Remove the subcategories first !';
-        // return response()->json($msg);
-        // //--- Redirect Section Ends
-        // }
+        if($data->subs->count()>0)
+        {
+        //--- Redirect Section
+        $msg = 'Remove the subcategories first !';
+        return response()->json($msg);
+        //--- Redirect Section Ends
+        }
         // if($data->products->count()>0)
         // {
         // //--- Redirect Section

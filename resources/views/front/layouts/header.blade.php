@@ -30,6 +30,8 @@
                   <a href="{{route('admin-about-index')}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
                   @elseif($page_no==8)
                   <a href="{{route('admin-pgother-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
+                  @elseif($page_no==9)
+                  <a href="{{route('admin-childcat-edit',$data->id)}}"><i class="fa fa-pencil"></i>&nbsp;Edit Page</a>
                   @endif                  
                 </li>
                 @endif
@@ -64,25 +66,100 @@
                                                 
                                   </li>
 
-                                  @foreach($rc_cats as $key=>$rc_cat)
+
+                                @foreach($rc_cats as $key=>$rc_cat)
+                                <li>
+                                    <div class="navbar-expand-lg ">                
+                                        <ul class="nav-cutum-1 navbar-nav mr-auto  ">
+                                                                  
+                                            <li class="dropdown">
+                                                <a class="colr-ornge" href="{{route('front.category',$rc_cat->slug)}}" id="navbarDropdown" role="button"  aria-haspopup="true" aria-expanded="false">{{$rc_cat->name}}</a>
+                                                @if($key==0)
+                                                <div class="{{(isset($page_no) &&  $page_no==4) || (isset($ad_check) &&  $ad_check==1)?'menu-border':''}}"></div>
+                                                @elseif($key==1)
+                                                 <div class="{{ (isset($ad_check) &&  $ad_check==2)?'menu-border':''}}"></div>
+                                                @endif
+                                          
+                                                <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                                                  @foreach($rc_cat->subs as $rc_sub)
+                                                  @if($rc_sub->childs->count()<1)
+                                                  <li><a href="{{route('front.category.detail',['slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a></li>
+                                                  @else
+                                                  <li class="dropdown">
+                                                      <a class="dropdown-toggle" href="{{route('front.category.detail',['slug2'=>$rc_sub->slug])}}" id="navbarDropdown" role="button"  aria-haspopup="true" aria-expanded="false">{{$rc_sub->name}}</a>
+                                                      
+                                                      <ul class="dropdown-menu" style="min-height: 50px" aria-labelledby="navbarDropdown">
+                                                      @foreach($rc_sub->childs as $child)
+                                                          <li><a href="{{route('front.childcategory.detail',['slug1' => $rc_sub->slug, 'slug2' => $child->slug])}}">{{$child->name}}</a></li>
+
+                                                         @endforeach
+                                                      </ul>
+                                                      
+                                                  </li>
+                                                  @endif
+                                                    @endforeach
+                                                </ul>
+                                                
+                                            </li>
+                                            
+                                        </ul>                
+                                    </div>
+                                </li>
+                                @endforeach
+
+                                  {{-- @foreach($rc_cats as $key=>$rc_cat)
                                   <li class="menu-item-has-children "><a href="{{route('front.category',$rc_cat->slug)}}">{{$rc_cat->name}}</a>
                                     @if($key==0)
-                                    <div class="{{request()->is('category/recipe*') || isset($ad_check) || (isset($page_no) &&  $page_no==4)?'menu-border':''}}"></div>
+                                    <div class="{{(isset($page_no) &&  $page_no==4) || (isset($ad_check) &&  $ad_check==1)?'menu-border':''}}"></div>
                                     @elseif($key==1)
-                                     <div class="{{request()->is('category/cuisine*')?'menu-border':''}}"></div>
+                                     <div class="{{ (isset($ad_check) &&  $ad_check==2)?'menu-border':''}}"></div>
                                     @endif
                                       <span class="sub-toggle"></span>
                                        <ul class="sub-menu">
                                                     @foreach($rc_cat->subs as $rc_sub)
-                                                    <li><a href="{{route('front.category.detail',['slug1'=>$rc_cat->slug,'slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
+                                                    <li><a href="{{route('front.category.detail',['slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
                                                     </li>
                                                     @endforeach
                                         </ul>
 
                                   </li>
-                                  @endforeach
+                                  @endforeach --}}
+ {{--                                @foreach($rc_cats as $key=>$rc_cat)
+                                    <li class="tmero">                                      
+                                        <div class="menu--product-categories">
+                                          <a class="fr-st" href="{{route('front.category',$rc_cat->slug)}}">{{$rc_cat->name}}</a>
+                                            @if($key==0)
+                                          <div class="{{(isset($page_no) &&  $page_no==4) || (isset($ad_check) &&  $ad_check==1)?'menu-border':''}}"></div>
+                                        @elseif($key==1)
+                                         <div class="{{ (isset($ad_check) &&  $ad_check==2)?'menu-border':''}}"></div>
+                                        @endif
+                                            <div class="menu__content">
+                                                        <ul class="menu--dropdown">
+                                                            @foreach($rc_cat->subs as $rc_sub)
+                                                          <li class="current-menu-item menu-item-has-children has-mega-menu"><a href="{{route('front.category.detail',['slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
+                                                              @if($rc_sub->childs->count()>0)
+                                                              <div class="mega-menu" style="position: relative;">
+                                                                <div class="mega-menu__column">                    
+                                                                  <ul class="mega-menu__list">
+                                                                    @foreach($rc_sub->childs as $child)
+                                                                    <li class="current-menu-item "><a href="#">{{$child->name}}</a>
+                                                                    </li>
+                                                                    @endforeach
+                                                                    
+                                                                  </ul>
+                                                                </div>
+                                                              </div>
+                                                              @endif
+                                                          </li>
+                                                          @endforeach
 
-                                  <li class="menu-item-has-children "><a href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a>
+                                                        </ul>
+                                            </div>
+                                        </div>                                      
+                                    </li>
+                                @endforeach --}}
+
+                                  <li class="menu-item-has-children "><a href="{{route('front.recipe',$blogpgSlug->slug)}}">Blog</a>
                                     <div class="{{request()->is('*blog*')?'menu-border':''}}"></div>
                                    
 
@@ -209,7 +286,7 @@
                 <span class="sub-toggle"></span>
                  <ul class="sub-menu">
                               @foreach($rc_cat->subs as $rc_sub)
-                              <li><a href="{{route('front.category.detail',['slug1'=>$rc_cat->slug,'slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
+                              <li><a href="{{route('front.category.detail',['slug2'=>$rc_sub->slug])}}">{{$rc_sub->name}}</a>
                               </li>
                               @endforeach
                   </ul>
@@ -217,7 +294,7 @@
             </li>
             @endforeach
 
-            <li class="current-menu-item menu-item-has-children"><a href="{{route('front.page',$blogpgSlug->slug)}}">Blog</a>
+            <li class="current-menu-item menu-item-has-children"><a href="{{route('front.recipe',$blogpgSlug->slug)}}">Blog</a>
             </li>
             <li class="current-menu-item menu-item-has-children"><a href="{{route('front.contact')}}">Contact</a>
             </li>

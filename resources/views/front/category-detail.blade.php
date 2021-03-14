@@ -39,7 +39,9 @@
 	        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-100">
             @if(isset($data->detail_desc))     
             <div class="mb-30">{!! $data->detail_desc !!}</div>
-            @endif                    
+            @endif
+
+
 	            <div class="row blog-pg-tag ft-recipe">
                 @if($datas->count()>0)
                   @foreach($datas as $datawise)
@@ -109,7 +111,7 @@
 
                   @endforeach
                 @else
-                 <h2 style="padding: 15px">No Data Found</h2>
+                 <h2 style="padding: 15px">No Recipes Found</h2>
                 @endif
 
                                                           
@@ -124,6 +126,34 @@
 	                
 	              </ul>
 	            </div>
+
+
+            @if($data->childs->count()>0)
+              <hr>
+              <h3 class="mb-20">Sub Category</h3>
+              <div class="row blog-pg-tag">
+              
+                  @foreach($data->childs as $datawise)
+                      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 pb-20">
+                            <div class="ps-product p-0 ">
+                              <div class="ps-product__thumbnail box-shadow"><a href="{{route('front.childcategory.detail',['slug1' => $data->slug, 'slug2' => $datawise->slug])}}"><img src="{{asset('assets/images/childcategories/'.$datawise->image)}}" alt=""></a>
+                               
+                              </div>
+                              <div class="cat-pad-sec">
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{route('front.childcategory.detail',['slug1' => $data->slug, 'slug2' => $datawise->slug])}}">{{$datawise->name}}</a>
+                                  
+                                </div>
+
+                              </div>
+                            </div>
+                      </div>  
+                  @endforeach                                                         
+              </div>
+
+           
+            @endif
+
+
 	        </div>
 	        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
   
